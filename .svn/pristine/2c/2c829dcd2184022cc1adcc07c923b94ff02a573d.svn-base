@@ -1,0 +1,80 @@
+package com.yhb.service.current.impl;
+
+
+import com.google.common.collect.Maps;
+import com.yhb.bean.entity.AccountChangeinfo;
+import com.yhb.dao.AccountChangeinfoDao;
+import com.yhb.service.current.AccountChangeinfoServie;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ *
+ * @ClassName: AccountChangeinfoServieImpl.java
+ * @Description: 活期宝转入转出明细实现类
+ * @author:Krx
+ * @date: 2017年5月11日 上午10:04:40
+ */
+@Service
+@Transactional
+public class AccountChangeinfoServieImpl implements AccountChangeinfoServie {
+
+    @Autowired
+    AccountChangeinfoDao accountChangeinfoDao;
+
+    static Map param = null;
+    /**
+     *
+     * @Description: 活期活期宝转入转出List
+     *
+     * @param: param
+     * @return： List<AccountChangeinfo>
+     * @author: Krx
+     * @date: 2017年5月11日 上午10:05:37
+     */
+    @Override
+    public List<AccountChangeinfo> getAccountChangeinfoList(Map<String, Object> params) {
+        param = Maps.newHashMap();
+        //获取页数
+        Integer page = Integer.parseInt(param.get("current").toString());
+        //封装Map参数
+        param.put("userId", params.get("userId"));
+        param.put("type", params.get("type"));
+        param.put("current",(page - 1) * 8);
+        param.put("total", 8);
+        param.put("startTime",params.get("startTime"));
+        param.put("endTime", params.get("endTime"));
+        //根据Type查询List
+        List<AccountChangeinfo> accountChangeinfoList = accountChangeinfoDao.userCurrentRecord(param);
+        if (accountChangeinfoList != null && accountChangeinfoList.size() > 0) {
+            return accountChangeinfoList;
+        }
+
+        return null;
+    }
+
+    /**
+         *
+         * @Description:  获取活期宝转入转出条数
+         *
+         * @param: param
+         * @return： int
+         * @author: Krx
+         * @date: 2017年5月11日 上午10:05:37
+         */
+        @Override
+        public int countAccountChangeInfoTotal(Map<String, Object> params) {
+            param = Maps.newHashMap();
+            param.put("userId", params.get("userId"));
+            param.put("type", params.get("type"));
+            param.put("startTime",params.get("startTime"));
+            param.put("endTime", params.get("endTime"));
+            int count = accountChangeinfoDao.userCurrentRecordCount(param);
+            return count;
+    }
+}

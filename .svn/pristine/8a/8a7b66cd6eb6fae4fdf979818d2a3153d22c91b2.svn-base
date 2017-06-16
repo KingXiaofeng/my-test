@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yhb.dao.BaseConfigDao">
+	<resultMap id="BaseResultMap" type="com.yhb.bean.entity.BaseConfig">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="value" property="value" jdbcType="VARCHAR" />
+		<result column="valuese" property="valuese" jdbcType="VARCHAR" />
+		<result column="data" property="data" jdbcType="VARCHAR" />
+		<result column="from_" property="from" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="orders" property="orders" jdbcType="INTEGER" />
+		<result column="res1" property="res1" jdbcType="VARCHAR" />
+		<result column="res2" property="res2" jdbcType="VARCHAR" />
+		<result column="res3" property="res3" jdbcType="VARCHAR" />
+		<result column="res4" property="res4" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		Id, title, name, value, valuese, data, from_, description,
+		orders, res1,
+		res2, res3,
+		res4
+	</sql>
+	
+	<select id="selectByParam" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from base_config
+		where  name =#{name}
+	</select>
+	
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.yhb.bean.entity.BaseConfigExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from base_config
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from base_config
+		where Id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		base_config
+		where Id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.yhb.bean.entity.BaseConfigExample">
+		delete from base_config
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.yhb.bean.entity.BaseConfig">
+		insert into base_config (Id,
+		title, name,
+		value, valuese, data,
+		from_, description, orders,
+		res1,
+		res2, res3, res4
+		)
+		values (#{id,jdbcType=INTEGER},
+		#{title,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{value,jdbcType=VARCHAR}, #{valuese,jdbcType=VARCHAR},
+		#{data,jdbcType=VARCHAR},
+		#{from,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{orders,jdbcType=INTEGER},
+		#{res1,jdbcType=VARCHAR}, #{res2,jdbcType=VARCHAR},
+		#{res3,jdbcType=VARCHAR},
+		#{res4,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.yhb.bean.entity.BaseConfig">
+		insert into base_config
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				Id,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="value != null">
+				value,
+			</if>
+			<if test="valuese != null">
+				valuese,
+			</if>
+			<if test="data != null">
+				data,
+			</if>
+			<if test="from != null">
+				from_,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="orders != null">
+				orders,
+			</if>
+			<if test="res1 != null">
+				res1,
+			</if>
+			<if test="res2 != null">
+				res2,
+			</if>
+			<if test="res3 != null">
+				res3,
+			</if>
+			<if test="res4 != null">
+				res4,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="value != null">
+				#{value,jdbcType=VARCHAR},
+			</if>
+			<if test="valuese != null">
+				#{valuese,jdbcType=VARCHAR},
+			</if>
+			<if test="data != null">
+				#{data,jdbcType=VARCHAR},
+			</if>
+			<if test="from != null">
+				#{from,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="orders != null">
+				#{orders,jdbcType=INTEGER},
+			</if>
+			<if test="res1 != null">
+				#{res1,jdbcType=VARCHAR},
+			</if>
+			<if test="res2 != null">
+				#{res2,jdbcType=VARCHAR},
+			</if>
+			<if test="res3 != null">
+				#{res3,jdbcType=VARCHAR},
+			</if>
+			<if test="res4 != null">
+				#{res4,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.yhb.bean.entity.BaseConfigExample"
+		resultType="java.lang.Integer">
+		select count(*) from base_config
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update base_config
+		<set>
+			<if test="record.id != null">
+				Id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.value != null">
+				value = #{record.value,jdbcType=VARCHAR},
+			</if>
+			<if test="record.valuese != null">
+				valuese = #{record.valuese,jdbcType=VARCHAR},
+			</if>
+			<if test="record.data != null">
+				data = #{record.data,jdbcType=VARCHAR},
+			</if>
+			<if test="record.from != null">
+				from_ = #{record.from,jdbcType=VARCHAR},
+			</if>
+			<if test="record.description != null">
+				description = #{record.description,jdbcType=VARCHAR},
+			</if>
+			<if test="record.orders != null">
+				orders = #{record.orders,jdbcType=INTEGER},
+			</if>
+			<if test="record.res1 != null">
+				res1 = #{record.res1,jdbcType=VARCHAR},
+			</if>
+			<if test="record.res2 != null">
+				res2 = #{record.res2,jdbcType=VARCHAR},
+			</if>
+			<if test="record.res3 != null">
+				res3 = #{record.res3,jdbcType=VARCHAR},
+			</if>
+			<if test="record.res4 != null">
+				res4 = #{record.res4,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update base_config
+		set Id = #{record.id,jdbcType=INTEGER},
+		title =
+		#{record.title,jdbcType=VARCHAR},
+		name =
+		#{record.name,jdbcType=VARCHAR},
+		value =
+		#{record.value,jdbcType=VARCHAR},
+		valuese =
+		#{record.valuese,jdbcType=VARCHAR},
+		data =
+		#{record.data,jdbcType=VARCHAR},
+		from_ =
+		#{record.from,jdbcType=VARCHAR},
+		description =
+		#{record.description,jdbcType=VARCHAR},
+		orders =
+		#{record.orders,jdbcType=INTEGER},
+		res1 =
+		#{record.res1,jdbcType=VARCHAR},
+		res2 =
+		#{record.res2,jdbcType=VARCHAR},
+		res3 =
+		#{record.res3,jdbcType=VARCHAR},
+		res4 = #{record.res4,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yhb.bean.entity.BaseConfig">
+		update base_config
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="value != null">
+				value = #{value,jdbcType=VARCHAR},
+			</if>
+			<if test="valuese != null">
+				valuese = #{valuese,jdbcType=VARCHAR},
+			</if>
+			<if test="data != null">
+				data = #{data,jdbcType=VARCHAR},
+			</if>
+			<if test="from != null">
+				from_ = #{from,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="orders != null">
+				orders = #{orders,jdbcType=INTEGER},
+			</if>
+			<if test="res1 != null">
+				res1 = #{res1,jdbcType=VARCHAR},
+			</if>
+			<if test="res2 != null">
+				res2 = #{res2,jdbcType=VARCHAR},
+			</if>
+			<if test="res3 != null">
+				res3 = #{res3,jdbcType=VARCHAR},
+			</if>
+			<if test="res4 != null">
+				res4 = #{res4,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where Id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.yhb.bean.entity.BaseConfig">
+		update base_config
+		set title = #{title,jdbcType=VARCHAR},
+		name = #{name,jdbcType=VARCHAR},
+		value = #{value,jdbcType=VARCHAR},
+		valuese =
+		#{valuese,jdbcType=VARCHAR},
+		data = #{data,jdbcType=VARCHAR},
+		from_ =
+		#{from,jdbcType=VARCHAR},
+		description =
+		#{description,jdbcType=VARCHAR},
+		orders = #{orders,jdbcType=INTEGER},
+		res1 = #{res1,jdbcType=VARCHAR},
+		res2 = #{res2,jdbcType=VARCHAR},
+		res3 =
+		#{res3,jdbcType=VARCHAR},
+		res4 = #{res4,jdbcType=VARCHAR}
+		where Id =
+		#{id,jdbcType=INTEGER}
+	</update>
+</mapper>

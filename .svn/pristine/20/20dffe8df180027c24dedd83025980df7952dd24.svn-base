@@ -1,0 +1,56 @@
+/**
+ * 
+ */
+package com.yhb.service.activity.impl;
+
+import com.yhb.bean.entity.AccountRaiseGet;
+import com.yhb.bean.entity.AccountRaiseGetExample;
+import com.yhb.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.yhb.dao.AccountRaiseGetDao;
+import com.yhb.service.activity.AccountRaiseGetService;
+
+import java.util.List;
+
+/**   
+* Copyright: Copyright (c) 2017 LanRu-Caifu
+* 
+* @ClassName: AccountRaiseGetServiceImpl.java
+* @Description: 用户加息劵实现类
+* @author:Krx
+* @date: 2017年5月16日 上午11:01:22 
+*/
+@Service
+@Transactional
+public class AccountRaiseGetServiceImpl implements AccountRaiseGetService {
+
+	@Autowired
+	AccountRaiseGetDao accountsRaiseDao;
+
+
+	/**
+	 *
+	 * @Description: 根据UserId,type,productId获取加息劵
+	 *
+	 * @param: userId
+	 * @return：List
+	 * @author: Krx
+	 * @date: 2017年5月8日 下午3:47:16
+	 */
+	@Override
+	public List<AccountRaiseGet> getUserRaise(String userId,Integer id,String...type) {
+		Integer state  = 0;
+		if(StringUtil.isNotBlank(type.toString())){
+			state = Integer.parseInt(type.toString());
+		}
+		AccountRaiseGetExample example = new AccountRaiseGetExample();
+		AccountRaiseGetExample.Criteria criterion = example.createCriteria();
+		criterion.andUseridEqualTo(userId);
+		criterion.andRaisestateEqualTo(state);
+		criterion.andProductidEqualTo(String.valueOf(id));
+		return accountsRaiseDao.selectByExample(example);
+	}
+}

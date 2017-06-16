@@ -1,0 +1,72 @@
+package com.yhb.service.current.impl;
+
+
+import com.yhb.bean.entity.AccountChangeinfo;
+import com.yhb.bean.entity.AccountChangeinfoExample;
+import com.yhb.dao.AccountChangeinfoDao;
+import com.yhb.service.current.AccountChangeinfoServie;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ *
+ * @ClassName: AccountChangeinfoServieImpl.java
+ * @Description: 活期宝转入转出明细实现类
+ * @author:Krx
+ * @date: 2017年5月11日 上午10:04:40
+ */
+@Service
+@Transactional
+public class AccountChangeinfoServieImpl implements AccountChangeinfoServie {
+
+    @Autowired
+    AccountChangeinfoDao accountChangeinfoDao;
+
+
+    /**
+     *
+     * @Description: 活期活期宝转入转出List
+     *
+     * @param: param
+     * @return： List<AccountChangeinfo>
+     * @author: Krx
+     * @date: 2017年5月11日 上午10:05:37
+     */
+    @Override
+    public List<AccountChangeinfo> getAccountChangeinfoList(String type) {
+        AccountChangeinfoExample example = new AccountChangeinfoExample();
+        AccountChangeinfoExample.Criteria criteria = example.createCriteria();
+        criteria.andAccounttypeEqualTo(type);
+        //根据Type查询List
+        List<AccountChangeinfo> accountChangeinfoList = accountChangeinfoDao.selectByExample(example);
+        if (accountChangeinfoList != null && accountChangeinfoList.size() > 0) {
+            return accountChangeinfoList;
+        }
+
+        return null;
+    }
+
+    /**
+     *
+     * @Description:  获取活期宝转入转出条数
+     *
+     * @param: param
+     * @return： int
+     * @author: Krx
+     * @date: 2017年5月11日 上午10:05:37
+     */
+    @Override
+    public int countAccountChangeInfoTotal(String type) {
+        AccountChangeinfoExample example = new AccountChangeinfoExample();
+        AccountChangeinfoExample.Criteria criteria = example.createCriteria();
+        criteria.andAccounttypeEqualTo(type);
+
+        int count = accountChangeinfoDao.countByExample(example);
+
+        return count;
+    }
+}

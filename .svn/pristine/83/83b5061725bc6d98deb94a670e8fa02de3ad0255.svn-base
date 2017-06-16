@@ -1,0 +1,239 @@
+/**
+ * 
+ */
+package com.yhb.controller;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import com.yhb.base.BaseConstants;
+import com.yhb.base.BaseController;
+import com.yhb.bean.entity.AccountsUsers;
+import com.yhb.enums.FileTypeEnum;
+import com.yhb.enums.ResultEnum;
+import com.yhb.service.user.AccountsUsersService;
+import com.yhb.util.DateUtils;
+import com.yhb.util.cache.RedisCache;
+import com.yhb.util.json.SpringUtils;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ * 
+ * @ClassName: ImageFormController.java
+ * @Description: 上传图片
+ * @author:Krx
+ * @date: 2017年5月8日 下午5:12:43
+ */
+@Controller
+@RequestMapping("file/")
+public class FileTransferController extends BaseController {
+	private static Logger logger = LoggerFactory.getLogger(FileTransferController.class);
+
+	@Autowired
+	AccountsUsersService accountsUsersService;
+	@Autowired
+	RedisCache cache;
+
+	// Test
+	@RequestMapping("index")
+	public String returnIndex(HttpServletRequest request, HttpServletResponse response) {
+		return "index";
+	}
+
+	/**
+	 * 
+	 * @Function: ImageFormController.java
+	 * @Description: 判断是否是对应文件类型的对应格式
+	 *
+	 * @param: String
+	 *             文件类型
+	 * @param: String
+	 *             文件格式 @return： boolean @throws：
+	 *
+	 * @version: v1.0.0
+	 * @author: wangxf
+	 * @date: 2017年5月9日 下午2:06:17
+	 *
+	 *        Modification History: Date Author Version Description
+	 *        ---------------------------------------------------------*
+	 *        2017年5月9日 wangxf v1.0.0 修改原因
+	 */
+	public boolean checkIsImageType(String fileType, String type) {
+
+		if (StringUtils.isBlank(fileType) || StringUtils.isBlank(type) || !FileTypeEnum.fileTypeList.contains(fileType)) {
+			return false;
+		}
+		// 图片格式
+		//List<String> imageTypeList = Arrays.<String>asList(extMap.get(fileType).split(","));
+		List<String> imageTypeList = Arrays.asList(FileTypeEnum.getCodeValueByCode(fileType).getCodeValue().split(","));
+
+		if (!imageTypeList.contains(type)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * 
+	 * @Function: ImageFormController.java
+	 * @Description: 单图片上传
+	 *
+	 * @param: @return：
+	 * 			@throws：
+	 *
+	 * @version: v1.0.0
+	 * @author: wangxf
+	 * @date: 2017年5月9日 下午1:14:00
+	 *
+	 *        Modification History: Date Author Version Description
+	 *        ---------------------------------------------------------*
+	 *        2017年5月9日 wangxf v1.0.0 修改原因
+	 */
+	@RequestMapping("uploadImage")
+	public void uploadheadImg(HttpServletRequest request, HttpServletResponse response) {
+		String token = request.getParameter("token");
+		// 向前台返回的Map
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		Map<String, String> data = new HashMap<String, String>();
+		
+		// 判断用户是否处于登陆状态
+		if (cache.tokenExit(token)) {
+			// 获取用户信息
+			AccountsUsers users = cache.getUserRedis(token, 1, AccountsUsers.class);
+
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+
+			// 获取传入的文件
+			MultipartFile file = multipartRequest.getFile("img");
+			// 图片的相对路径
+			String url = "";
+			// 图片的绝对路径
+			String path = "";
+
+			if (null != file) {
+				// 判断图片是否太大
+				if (file.getSize() > FileTypeEnum.maxSize) {
+					code = String.valueOf(ResultEnum.IMAGE_ISBIG.getCode());
+					msg = ResultEnum.IMAGE_ISBIG.getCodeDesc();
+				} else {
+					// 获得文件类型（可以判断如果不是图片，禁止上传）
+					String contenttype = file.getContentType();
+
+					String filename = file.getOriginalFilename();
+					String type = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
+					// 判断是否为图片格式
+					if (!checkIsImageType(FileTypeEnum.IMAGE.getCode(), type)) {
+						code = String.valueOf(ResultEnum.IMAGE_TYPE_ERROR.getCode());
+						msg = ResultEnum.IMAGE_TYPE_ERROR.getCodeDesc();
+					} else {
+						// 获取保存到服务器的地址
+						String filePath = getFilePath(file.getOriginalFilename(), contenttype);
+
+						File createFile = new File(filePath);
+
+						try {
+							// 创建图片
+							file.transferTo(createFile);
+
+							// 获取图片url
+							String picUrl = StringUtils.replace(
+									StringUtils.substringAfter(filePath, BaseConstants.IMAGE_FILE_PATH), "\\", "/");
+							url = picUrl;
+							path = BaseConstants.HTTPADDRESS + url;
+
+							code = String.valueOf(ResultEnum.SUCCESS.getCode());
+
+							// 保存用户头像
+							users.setHeadimg(url);
+							accountsUsersService.updateUserHanderImage(users);
+							
+							msg = "图片上传成功";
+						} catch (IOException e) {
+							e.printStackTrace();
+							code = String.valueOf(ResultEnum.ERROR.getCode());
+							msg = "图片上传出错";
+						}
+					}
+				}
+
+			} else {
+				code = String.valueOf(ResultEnum.IMAGE_ISNULL.getCode());
+				msg = ResultEnum.IMAGE_ISNULL.getCodeDesc();
+			}
+
+			data.put("code", code);
+			data.put("msg", msg);
+			data.put("url", url);
+			data.put("path", path);
+			//token有效为true
+			status = true;
+
+		}
+		returnMap.put("status", status);
+		returnMap.put("datas", data);
+
+		SpringUtils.renderJson(response, returnMap);
+
+	}
+
+	/**
+	 * 图片分类地址
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public String getImageAddress(String type) {
+		String imageClassify = "";
+		switch (type) {
+		case "1": // 保存头像图片
+			imageClassify = "headImg";
+			break;
+		default:
+			break;
+		}
+		return imageClassify;
+	}
+
+	/**
+	 * 获取保存到服务器的物理地址
+	 * 
+	 * @param originalFilename
+	 * @return
+	 */
+	private String getFilePath(String originalFilename, String type) {
+		// 拼接具体存放的地址
+		String fileFolder = BaseConstants.IMAGE_FILE_PATH + File.separator + getImageAddress(type) + File.separator
+				+ DateUtils.formatDate(new Date());
+
+		File file = new File(fileFolder);
+
+		if (!file.isDirectory()) {
+			file.mkdirs();
+		}
+
+		// 使用UUID生成文件名称
+		String fileName = UUID.randomUUID().toString() + "." + StringUtils.substringAfterLast(originalFilename, ".");
+
+		return fileFolder + File.separator + fileName;
+	}
+
+}

@@ -1,0 +1,40 @@
+package com.yhb.dao;
+
+import com.yhb.bean.entity.ExperienceSend;
+import com.yhb.bean.entity.ExperienceSendExample;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+public interface ExperienceSendDao {
+    int countByExample(ExperienceSendExample example);
+
+    int deleteByExample(ExperienceSendExample example);
+
+    int deleteByPrimaryKey(Integer experiencesendid);
+
+    int insert(ExperienceSend record);
+
+    int insertSelective(ExperienceSend record);
+
+    List<ExperienceSend> selectExperienceSendList(Map param);
+
+    List<ExperienceSend> selectByExampleWithBLOBs(ExperienceSendExample example);
+
+    List<ExperienceSend> selectByExample(ExperienceSendExample example);
+
+    ExperienceSend selectByPrimaryKey(Integer experiencesendid);
+
+    int updateByExampleSelective(@Param("record") ExperienceSend record, @Param("example") ExperienceSendExample example);
+
+    int updateByExampleWithBLOBs(@Param("record") ExperienceSend record, @Param("example") ExperienceSendExample example);
+
+    int updateByExample(@Param("record") ExperienceSend record, @Param("example") ExperienceSendExample example);
+
+    int updateByPrimaryKeySelective(ExperienceSend record);
+
+    int updateByPrimaryKeyWithBLOBs(ExperienceSend record);
+
+    int updateByPrimaryKey(ExperienceSend record);
+}

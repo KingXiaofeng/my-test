@@ -1,0 +1,148 @@
+package com.yhb.base;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.yhb.util.PropertiesFileUtil;
+
+/**
+ * 
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ * 
+ * @ClassName: BaseConstants.java
+ * @Description: 全局常量
+ * @author:Krx
+ * @date: 2017年4月27日 下午1:52:27
+ */
+public class BaseConstants {
+
+	/**
+	 * 常量
+	 * 
+	 * @author KRx
+	 */
+	public interface Token {
+		public final static String TOKEN_NAME = "token";
+	}
+	public static final String HTML_Quotes_Double = "&quot;";// 双引号
+	public static final String HTML_Quotes_Single = "&apos;";// 单引号
+
+	public static final String ParentIDCom = "00000000-0000-0000-0000-000000000000"; // parentId
+	/**
+	 * PC来源
+	 */
+	public static final String PC = "PC";
+	/**
+	 * H5来源
+	 */
+	public static final String H5 = "H5";
+	/**
+	 * APP来源
+	 */
+	public static final String APP = "APP";
+	/**
+	 * WEIXIN
+	 */
+	public static final String WEIXIN = "微信";
+	/**
+	 * 代理商
+	 */
+	public static final String AGENT_ADDUSER = "代理商添加下属子商户";
+	/**
+	 * 代理商
+	 */
+	public static final String DISTRIBUTOR_ADDUSER = "经销商添加下属子商户";
+	/**
+	 * OTHER
+	 */
+	public static final String OTHER = "其他";
+
+	/**
+	 * UTF-8编码
+	 */
+	public static final String UTF8 = "UTF-8";
+	/**
+	 * 提示信息
+	 */
+	public static final String MESSAGE = "message";
+	/**
+	 * 系统提示
+	 */
+	public static final String rollOutMsg = "转出信息";
+	public static final String depositMsg = "充值信息";
+	public static final String tradeWithdrawMsg = "提现信息";
+	public static final String DisMsg = "经销商信息";
+	public static final String RedMsg = "红包信息";
+	public static final String RaiseMsg = "加息劵信息";
+	public static final String ExMsg = "体验金信息";
+	public static final String SharingMsg = "分享金信息";
+	/**
+	 * cookie中的JSESSIONID名称
+	 */
+	public static final String JSESSION_COOKIE = "JSESSIONID";
+	/**
+	 * url中的jsessionid名称
+	 */
+	public static final String JSESSION_URL = "jsessionid";
+	/**
+	 * 附件路径
+	 */
+	public static final String FILEPATH = "files";
+	/**
+	 * HTTP POST请求
+	 */
+	public static final String POST = "POST";
+	/**
+	 * HTTP GET请求
+	 */
+	public static final String GET = "GET";
+
+	public static final String DES_PUBLIC_ENCRYPT_KEY = "6Ta4OaHZdpA="; // DES加密key
+	// IV
+	public static final String DES_PRIVATE_ENCRYPT_KEY = "o0al4OaEWBzA1";
+	/** app加密key值 **/
+	public static final String DES_PUBLIC_KEY_IOS_ANDROID = "0123456789lbsoft";
+
+	/**
+	 * 图片路径
+	 */
+	public static final String imgUrl = "http://" + PropertiesFileUtil.getInstance("conf").get("ImgPath")
+			+ "/static_img/";
+	public static final String myimgUrl = "http://" + PropertiesFileUtil.getInstance("conf").get("ImgPath")
+			+ "/static_img/";
+	public static final String HTTPADDRESS = "http://" + PropertiesFileUtil.getInstance("conf").get("ImgPath");
+	public static final String myimgComputerUrl = "D:/tool/files/";
+	public static final String IMAGE_FILE_PATH = "D:\\tool\\files";
+
+	// 验证前台参数是否存在于系统字典中 保证前后一致
+	public static Map<String, String> VALIDATEKEY_MAP = new HashMap<String, String>();
+
+	// 对应系统字典
+	public static Map<String, Integer> VALIDATEVALUEISNULLBYKEY = new HashMap<String, Integer>();
+
+	static {
+		VALIDATEKEY_MAP.put("account", "account"); // 账号
+		VALIDATEKEY_MAP.put("password", "password"); // 密码
+		VALIDATEKEY_MAP.put("phoneCode", "phoneCode"); // 手机验证码
+		VALIDATEKEY_MAP.put("picCode", "picCode"); // 图文验证码
+		VALIDATEKEY_MAP.put("state", "state"); // 发送短信的类型
+		VALIDATEKEY_MAP.put("smsContext", "smsContext"); // 发送的短信信息
+		VALIDATEKEY_MAP.put("token", "token"); // token信息
+		VALIDATEKEY_MAP.put("trdAmt", "trdAmt"); // 充值金额为空
+		VALIDATEKEY_MAP.put("bankCode", "bankCode"); // bankCode银行代码为空
+		VALIDATEKEY_MAP.put("img", "img"); // 上传图片
+
+		VALIDATEVALUEISNULLBYKEY.put("acccount", -1); // 手机号码
+		VALIDATEVALUEISNULLBYKEY.put("password", -5); // 密码
+		VALIDATEVALUEISNULLBYKEY.put("phoneCode", -7); // 手机验证码
+		VALIDATEVALUEISNULLBYKEY.put("picCode", -8); // 图文验证码
+		VALIDATEVALUEISNULLBYKEY.put("state", -100); // 发送短信的类型
+		VALIDATEVALUEISNULLBYKEY.put("smsContext", -101); // 发送的短信信息
+		VALIDATEVALUEISNULLBYKEY.put("token", -11); // token信息验证
+		VALIDATEVALUEISNULLBYKEY.put("trdAmt", -15); // 充值金额为空验证
+		VALIDATEVALUEISNULLBYKEY.put("bankCode", -17); // bankCode银行代码为空验证
+		VALIDATEVALUEISNULLBYKEY.put("img", -20); // 上传图片
+
+	}
+
+}

@@ -1,0 +1,392 @@
+/**
+ * 
+ */
+package com.yhb.validate;
+
+import com.google.common.collect.Maps;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import com.yhb.base.BaseConstants;
+import com.yhb.enums.ResultEnum;
+import com.yhb.util.CheckFormUtil;
+import com.yhb.util.StringUtil;
+import com.yhb.vo.GetFrontDepositDatasVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ * 
+ * @ClassName: ParamCheckValidate.java
+ * @Description: 参数验证
+ * @author:Krx
+ * @date: 2017年5月5日 上午11:00:10
+ */
+public class ParamCheckValidate {
+
+	private static String keyName;
+
+	private static Object value;
+
+	// 验证格式
+	private static final Map<String, String> exitMap = new HashMap<>();
+
+	static {
+		exitMap.put("account", "account"); // 手机号码
+		exitMap.put("password", "password"); // 密码
+		exitMap.put("email", "email"); // 邮箱
+		exitMap.put("cradId", "cradId"); // 身份证号码
+		exitMap.put("trAdmt", "trAdmt"); // 充值金额
+	}
+
+	private static Logger logger = LoggerFactory.getLogger(ParamCheckValidate.class);
+
+	/**
+	 * 
+	 * @Description:校验入参,判断是否为登录之后的token验证
+	 *
+	 * @param:param
+	 * @return：Json OR Boolean
+	 * @author: Administrator
+	 * @date: 2017年5月5日 上午11:31:53
+	 */
+	public static Map<String, String> getValidateInfo(Map<String, String> param) {
+		Map<String, String> returnMap = Maps.newHashMap();
+		// 遍历Map集合获取KeyName
+		for (String keyNames : param.keySet()) {
+			if (keyNames.equals("datas")) {
+				returnMap = DatasMessage(param);
+				return returnMap;
+			} else {
+				returnMap = Message(param);
+				return returnMap;
+			}
+		}
+		return returnMap;
+	}
+
+	/**
+	 * Map<String,List<Map<String,Object>>> token : 2121521 datas :
+	 * {"account":12245674,"bankCode":13232141,"trdAmt":100.01} -- Map
+	 * <String,Object> Json-Object json = datas =
+	 * {"account":12245674,"bankCode":13232141,"trdAmt":100.01}
+	 * 
+	 * Json - bean
+	 * 
+	 * Bean value
+	 * 
+	 * 
+	 * 
+	 * @Description:校验入参 {"token":125154154151sSSS1111,"datas":{"imageName":
+	 *                   13232141}}
+	 * @param:param
+	 * @return：Json OR Boolean
+	 * @author: Krx
+	 * @date: 2017年5月5日 上午11:31:53
+	 */
+	@SuppressWarnings({ "unchecked", "unused" })
+	public static Map<String, String> DatasMessage(Map<String, String> param) {
+		Map<String, String> returnMap = Maps.newHashMap();
+		List<String> paramList = new ArrayList<String>();
+		List<String> datasList = new ArrayList<String>();
+
+		Set<String> get = param.keySet();
+		GetFrontDepositDatasVo datas = null;
+		Map<String, Object> map = null;
+		// 找出相对应的KeyName 和相对应的Value
+		for (String keyName : get) {
+			if (!keyName.equals("JSESSIONID")) {
+				if (keyName.equals("datas")) {
+					// Json转Object
+					Object object1 = com.alibaba.fastjson.JSONObject.toJSON(param.get("datas"));
+					//得到Map
+					Map<String,Object> datasMap  = com.yhb.util.json.JSONUtil.toMap(object1);
+
+					//判断数据集是否为空
+					if (datasMap == null || datasMap.size() == 0) {
+						returnMap.put(String.valueOf(ResultEnum.DATAS_ISNULL.getCode()),
+								ResultEnum.DATAS_ISNULL.getCodeDesc());
+						return returnMap;
+					}
+
+					for (String string : map.keySet()) {
+						// 存入List
+						datasList.add(string);
+					}
+
+				}
+				// {token,account,bankCode,trdAmt}
+				paramList.add(keyName);
+			}
+		}
+		paramList.remove("datas");
+		// 最后所有的Key
+		for (String string : datasList) {
+			paramList.add(string);
+
+		}
+		// 遍历List取出KeyName对象
+		for (String string : paramList) {
+			// KeyName对象存在于该集合里，则进入判断否则返回状态
+			if (BaseConstants.VALIDATEKEY_MAP.containsKey(string)) {
+				if (string.equals("token")) {
+					// 取出相对应的值
+					value = param.get(string);
+				} else {
+					value = map.get(string);
+				}
+
+				if (StringUtil.isNull(value) || StringUtil.isBlank(String.valueOf(value))) {
+					// 验证格式是否正确
+					if (getExitErrorInfo(keyName, value).size() > 0) {
+						return returnMap = getExitErrorInfo(keyName, value);
+					}
+					// 如果当前value为空，那么当前KeyName所带参数就一定为空,找到系统字典中所对应的Code匹配
+					if (BaseConstants.VALIDATEVALUEISNULLBYKEY.containsKey(string)) {
+						Integer enumValue = BaseConstants.VALIDATEVALUEISNULLBYKEY.get(string);
+
+						// 通过values()方法，将枚举里所有类型列出来
+						for (ResultEnum resultCode : ResultEnum.values()) {
+							if (resultCode.getCode() == enumValue) {
+								returnMap.put(String.valueOf(resultCode.getCode()), resultCode.getCodeDesc());
+							}
+						}
+					}
+				}
+			} else {
+				returnMap.put(String.valueOf(ResultEnum.DICTIONARY_ERROR.getCode()),
+						ResultEnum.DICTIONARY_ERROR.getCodeDesc());
+			}
+
+		}
+
+		return returnMap;
+	}
+
+	/**
+	 * 
+	 * @Description:校验入参
+	 *
+	 * @param:param
+	 * @return：Json OR Boolean
+	 * @author: Krx
+	 * @date: 2017年5月5日 上午11:31:53
+	 */
+	public static Map<String, String> Message(Map<String, String> param) {
+		Map<String, String> returnMap = Maps.newHashMap();
+		List<String> paramList = new ArrayList<String>();
+		// 遍历Map集合获取KeyName
+		for (String keyNames : param.keySet()) {
+			if (!keyNames.equals("JSESSIONID") && !keyNames.equals("inviteCode")) {
+				keyName = keyNames;
+				paramList.add(keyName);
+			}
+		}
+		// 遍历List取出KeyName对象
+		for (String string : paramList) {
+			// KeyName对象存在于该集合里，则进入判断否则返回状态
+			if (BaseConstants.VALIDATEKEY_MAP.containsKey(string)) {
+				// 取出相对应的值
+				value = param.get(string);
+				if (StringUtil.isNull(value) || StringUtil.isBlank(String.valueOf(value))) {
+					// 验证格式是否正确
+					if (getExitErrorInfo(keyName, value).size() > 0) {
+						return returnMap = getExitErrorInfo(keyName, value);
+					}
+					// 如果当前value为空，那么当前KeyName所带参数就一定为空,找到系统字典中所对应的Code匹配
+					if (BaseConstants.VALIDATEVALUEISNULLBYKEY.containsKey(string)) {
+						Integer enumValue = BaseConstants.VALIDATEVALUEISNULLBYKEY.get(string);
+
+						// 通过values()方法，将枚举里所有类型列出来
+						for (ResultEnum resultCode : ResultEnum.values()) {
+							if (resultCode.getCode() == enumValue) {
+								returnMap.put(String.valueOf(resultCode.getCode()), resultCode.getCodeDesc());
+							}
+						}
+					}
+				}
+			} else {
+				returnMap.put(String.valueOf(ResultEnum.DICTIONARY_ERROR.getCode()),
+						ResultEnum.DICTIONARY_ERROR.getCodeDesc());
+			}
+
+		}
+
+		return returnMap;
+	}
+
+	// 验证存在的字段是否格式出错
+	public static Map<String, String> getExitErrorInfo(String keyName, Object values) {
+		Map<String, String> returnMap = new HashMap<String, String>();
+
+		// 转String
+		String value = String.valueOf(values);
+		// KeyName对象存在于该集合里，则进入判断否则返回状态
+		if (exitMap.containsKey(keyName)) {
+			// 手机号码格式校验
+			if (keyName.equals("account")) {
+				if (!CheckFormUtil.isMobileNum(value)) {
+					returnMap.put(String.valueOf(ResultEnum.LOGIN_FORMISFLAG.getCode()),
+							ResultEnum.LOGIN_FORMISFLAG.getCodeDesc());
+					return returnMap;
+				}
+			}
+			// 密码格式校验
+			if (keyName.equals("password")) {
+				if (!CheckFormUtil.isPassword(value)) {
+					returnMap.put(String.valueOf(ResultEnum.LOGIN_FORMISFLAG.getCode()),
+							ResultEnum.LOGIN_FORMISFLAG.getCodeDesc());
+					return returnMap;
+				}
+			}
+			// 邮箱格式校验
+			if (keyName.equals("email")) {
+				if (!CheckFormUtil.isPassword(value)) {
+					returnMap.put(String.valueOf(ResultEnum.EMAIL_FORMISNRROR.getCode()),
+							ResultEnum.EMAIL_FORMISNRROR.getCodeDesc());
+					return returnMap;
+				}
+			}
+			// 身份证号码格式校验
+			if (keyName.equals("cradId")) {
+				if (!CheckFormUtil.isPassword(value)) {
+					returnMap.put(String.valueOf(ResultEnum.CARD_FORMISNRROR.getCode()),
+							ResultEnum.CARD_FORMISNRROR.getCodeDesc());
+					return returnMap;
+				}
+			}
+			// 充值金额格式校验
+			if (keyName.equals("trAdmt")) {
+				if (!CheckFormUtil.isPassword(value)) {
+					returnMap.put(String.valueOf(ResultEnum.TRADMT_FORMIISERROR.getCode()),
+							ResultEnum.TRADMT_FORMIISERROR.getCodeDesc());
+					return returnMap;
+				}
+			}
+
+		}
+
+		return returnMap;
+	}
+
+	/**
+	 * 将一个 Map 对象转化为一个 JavaBean
+	 * 
+	 * @param clazz
+	 *            要转化的类型
+	 * @param map
+	 *            包含属性值的 map
+	 * @return 转化出来的 JavaBean 对象
+	 * @throws IntrospectionException
+	 *             如果分析类属性失败
+	 * @throws IllegalAccessException
+	 *             如果实例化 JavaBean 失败
+	 * @throws InstantiationException
+	 *             如果实例化 JavaBean 失败
+	 * @throws InvocationTargetException
+	 *             如果调用属性的 setter 方法失败
+	 */
+	@SuppressWarnings("rawtypes")
+	public static <T> T toBean(Class<T> clazz, Map map) {
+		T obj = null;
+		try {
+			BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
+			obj = clazz.newInstance(); // 创建 JavaBean 对象
+
+			// 给 JavaBean 对象的属性赋值
+			PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+			for (int i = 0; i < propertyDescriptors.length; i++) {
+				PropertyDescriptor descriptor = propertyDescriptors[i];
+				String propertyName = descriptor.getName();
+				if (map.containsKey(propertyName)) {
+					// 下面一句可以 try 起来，这样当一个属性赋值失败的时候就不会影响其他属性赋值。
+					Object value = map.get(propertyName);
+					if ("".equals(value)) {
+						value = null;
+					}
+					Object[] args = new Object[1];
+					args[0] = value;
+					try {
+						descriptor.getWriteMethod().invoke(obj, args);
+					} catch (InvocationTargetException e) {
+						logger.info("字段映射失败");
+					}
+				}
+			}
+		} catch (IllegalAccessException e) {
+			logger.info("实例化 JavaBean 失败");
+		} catch (IntrospectionException e) {
+			logger.info("分析类属性失败");
+		} catch (IllegalArgumentException e) {
+			logger.info("映射错误");
+		} catch (InstantiationException e) {
+			logger.info("实例化 JavaBean 失败");
+		}
+
+		return (T) obj;
+	}
+
+	/**
+	 * 将一个 JavaBean 对象转化为一个 Map 利用Introspector和PropertyDescriptor 将Bean --> Map
+	 * 
+	 * @param——Bean
+	 *            (Object)
+	 */
+	public static Map<String, Object> convertBean(Object obj) {
+		if (obj == null) {
+			return null;
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());
+			PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+			for (PropertyDescriptor property : propertyDescriptors) {
+				String key = property.getName();
+				// 过滤class属性
+				if (!key.equals("class")) {
+					// 得到property对应的getter方法
+					Method getter = property.getReadMethod();
+					Object value = getter.invoke(obj);
+
+					map.put(key, value);
+				}
+
+			}
+		} catch (Exception e) {
+			logger.error("transBean2Map Error {}", e);
+		}
+		return map;
+	}
+
+
+	/**
+	 * 得到Map。datas里面的值
+	 * @param param
+	 * @return
+	 */
+	public static Map<String,Object> getDatasMapValue(Map<String,String> param){
+		Map<String,Object> datasMap = Maps.newHashMap();
+		// Json转Object
+		Object object1 = com.alibaba.fastjson.JSONObject.toJSON(param.get("datas"));
+		//得到Map
+		datasMap  = com.yhb.util.json.JSONUtil.toMap(object1);
+
+		if (datasMap == null || datasMap.size() == 0) {
+			datasMap = Maps.newHashMap();
+			datasMap.put("code", -1);
+			datasMap.put("msg", "参数为空");
+			return datasMap;
+		}
+
+		return datasMap;
+	}
+}

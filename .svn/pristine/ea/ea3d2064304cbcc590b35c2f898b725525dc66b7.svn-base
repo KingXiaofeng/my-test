@@ -1,0 +1,101 @@
+/**
+ * 
+ */
+package com.yhb.service.bank.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.yhb.bean.entity.BaseBankcard;
+import com.yhb.bean.entity.BaseBankcardExample;
+import com.yhb.bean.entity.BaseBankcardExample.Criteria;
+import com.yhb.dao.BaseBankcardDao;
+import com.yhb.service.bank.BaseBankcardService;
+import com.yhb.util.cache.RedisCache;
+
+/**   
+* Copyright: Copyright (c) 2017 LanRu-Caifu
+* 
+* @ClassName: BaseBankcardServiceImpl.java
+* @Description: 用户银行卡实现类
+* @author:Krx
+* @date: 2017年5月12日 下午1:30:29 
+*/
+@Service
+@Transactional
+public class BaseBankcardServiceImpl implements BaseBankcardService {
+	
+	@Autowired
+	BaseBankcardDao baseBankDao;
+	@Autowired
+	RedisCache cache;
+
+	/** 
+	* @see BaseBankcardService#selectUserBankInfoByUserId(java.lang.String)
+	* @Function: BaseBankcardServiceImpl.java
+	* @Description: 查询用户银行卡信息
+	*
+	* @param:描述1描述
+	* @return：返回结果描述
+	* @author: Krx
+	* @date: 2017年5月12日 下午1:30:40 
+	*/
+	@Override
+	public BaseBankcard selectUserBankInfoByUserId(String param) {
+		BaseBankcardExample example = new BaseBankcardExample();
+		Criteria criteria = example.createCriteria();
+		if(param.contains("userId")){
+			criteria.andUseridEqualTo(param);
+		}else if(param.contains("bankcardnumber")){
+			criteria.andBankcardnumberEqualTo(param);
+		}
+		
+		List<BaseBankcard> baseBankList = baseBankDao.selectByExample(example);
+		if(baseBankList != null && baseBankList.size()>0){
+			for (int i = 0; i < baseBankList.size();) {
+				BaseBankcard  baseBankCard = baseBankList.get(i);
+				return baseBankCard;
+			}
+		}
+		return null;
+	}
+
+	/** 
+	* @see BaseBankcardService#updateBankInfo(com.yhb.bean.entity.BaseBankcard)
+	* @Function: BaseBankcardServiceImpl.java
+	* @Description: BaseBankcardService
+	*
+	* @param:描述1描述
+	* @return：返回结果描述
+	* @author: Krx
+	* @date: 2017年5月12日 下午1:30:40 
+	*/
+	@Override
+	public boolean updateBankInfo(BaseBankcard baseBankCard) {
+		if(baseBankDao.updateByPrimaryKeySelective(baseBankCard)>0){
+			return true;
+		}
+		return false;
+	}
+
+	/** 
+	* @see BaseBankcardService#insertBankInfo(java.util.Map)
+	* @Function: BaseBankcardServiceImpl.java
+	* @Description: 根据Map添加用户银行卡信息
+	*
+	* @param:map中含有的信息字段一定存在baseBankInfo该表中
+	* @return：返回结果描述
+	* @author: Krx
+	* @date: 2017年5月12日 下午1:30:40 
+	*/
+	@Override
+	public boolean insertBankInfo(Map<String, String> param) {
+      		
+		return false;
+	}
+
+}

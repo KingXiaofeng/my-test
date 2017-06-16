@@ -1,0 +1,46 @@
+/**
+ * 
+ */
+package com.yhb.service.bank.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.yhb.bean.entity.BaseInterfaceBank;
+import com.yhb.dao.BaseInterfaceBankDao;
+import com.yhb.service.bank.BaseInterfaceBankService;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ * 
+ * @ClassName: BaseInterfaceBankService.java
+ * @Description: 银行接口
+ * @author:Krx
+ * @date: 2017年5月9日 下午1:45:09
+ */
+@Service
+public class BaseInterfaceBankServiceImpl implements BaseInterfaceBankService {
+
+	@Autowired
+	BaseInterfaceBankDao interfaceBankDao;
+
+	/**
+	 * @see BaseInterfaceBankService#selectBankNumByBankCode(java.lang.String)
+	 * @Function: BaseInterfaceBankServiceImpl.java
+	 * @Description: 查询银行通过银行代码
+	 *
+	 * @param:bankCode
+	 * @return：BaseInterfaceBank
+	 * @author: Krx
+	 * @date: 2017年5月9日 下午1:45:24
+	 */
+	@Override
+	public BaseInterfaceBank selectBankNumByBankCode(String bankCode) {
+		BaseInterfaceBank interfaceBank = interfaceBankDao.selectBankNumByBankCode(bankCode);
+		if (interfaceBank != null) {
+			return interfaceBank;
+		}
+		return null;
+	}
+
+}

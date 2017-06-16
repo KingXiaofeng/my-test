@@ -1,0 +1,71 @@
+/**
+ *
+ */
+package yhb;
+
+import com.alibaba.fastjson.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ *
+ * @ClassName: testMain.java
+ * @Description: 该类的功能描述
+ * @author:Krx
+ * @date: 2017年5月10日 下午4:22:42
+ */
+public class testMain {
+
+    public static void main(String[] args) {
+
+        String str = "{\n" +
+                "    \"cat\":\"it\",\n" +
+                "    \"language\":[\n" +
+                "        {\"id\":1,\"ide\":\"eclipse\",\"name\":Java},\n" +
+                "        {\"id\":2,\"ide\":\"XCode\",\"name\":\"Swift\"},\n" +
+                "        {\"id\":3,\"ide\":\"Visual Stdio\",\"name\":\"C#\"}     \n" +
+                "    ],\n" +
+                "    \"pop\":true\n" +
+                "}";
+        //
+
+
+        Map<String,Object>  param1 = new HashMap<>();
+        Map<String,Object>  param2 = new HashMap<>();
+        param1.put("token", "sssss");
+        param1.put("datas", param2);
+
+        param2.put("city", "河南");
+        param2.put("userId", "ssssss");
+
+
+
+        System.out.println(param1);
+
+        JSONObject object = new JSONObject(param1);
+        System.out.println(object);
+
+        Object object1 = JSONObject.toJSON(param1.get("datas"));
+        System.out.println(object1);
+
+       Map<String,Object> okMap  = com.yhb.util.json.JSONUtil.toMap(object1);
+       System.out.println(okMap);
+
+        for (String string : okMap.keySet()) {
+            System.out.println(string);
+            System.out.println(okMap.get(string));
+        }
+
+        // GetFrontDepositDatasVo vo =
+        // ParamCheckValidate.toBean(GetFrontDepositDatasVo.class,param3);
+        // System.out.println(vo);
+        //// (GetFrontDepositDatasVo)getfront.getDatas();
+
+        // 此处做为示例自定义String转换，因为Hutool中已经提供String转换，请尽量不要替换
+        // 替换可能引发关联转换异常（例如覆盖String转换会影响全局）
+        // Assert.assertEquals("Custom: 454553", result);
+    }
+
+}

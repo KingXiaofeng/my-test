@@ -1,0 +1,34 @@
+package com.yhb.dao;
+
+import com.yhb.bean.entity.BaseConfig;
+import com.yhb.bean.entity.BaseConfigExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+
+public interface BaseConfigDao {
+    int countByExample(BaseConfigExample example);
+
+    int deleteByExample(BaseConfigExample example);
+
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(BaseConfig record);
+
+    int insertSelective(BaseConfig record);
+
+    BaseConfig selectByParam(String param);
+    
+    List<BaseConfig> selectByExample(BaseConfigExample example);
+
+    List<BaseConfig> getAllbase();
+
+    BaseConfig selectByPrimaryKey(Integer id);
+
+    int updateByExampleSelective(@Param("record") BaseConfig record, @Param("example") BaseConfigExample example);
+
+    int updateByExample(@Param("record") BaseConfig record, @Param("example") BaseConfigExample example);
+
+    int updateByPrimaryKeySelective(BaseConfig record);
+
+    int updateByPrimaryKey(BaseConfig record);
+}

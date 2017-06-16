@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yhb.dao.AgentDao">
+	<resultMap id="BaseResultMap" type="com.yhb.bean.entity.Agent">
+		<id column="UserID" property="userid" jdbcType="VARCHAR" />
+		<id column="UserName" property="username" jdbcType="VARCHAR" />
+		<result column="ParentID" property="parentid" jdbcType="VARCHAR" />
+		<result column="CardID" property="cardid" jdbcType="VARCHAR" />
+		<result column="Activity" property="activity" jdbcType="INTEGER" />
+		<result column="Password" property="password" jdbcType="VARCHAR" />
+		<result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="UserState" property="userstate" jdbcType="INTEGER" />
+		<result column="LostTime" property="losttime" jdbcType="TIMESTAMP" />
+		<result column="CityID" property="cityid" jdbcType="INTEGER" />
+		<result column="LvlID" property="lvlid" jdbcType="INTEGER" />
+		<result column="Commission_Balance" property="commissionBalance"
+			jdbcType="DECIMAL" />
+		<result column="NotReceivedCommission" property="notreceivedcommission"
+			jdbcType="DECIMAL" />
+		<result column="ReceivedCommission" property="receivedcommission"
+			jdbcType="DECIMAL" />
+		<result column="signShare" property="signshare" jdbcType="DECIMAL" />
+		<result column="signState" property="signstate" jdbcType="INTEGER" />
+		<result column="winxinImg" property="winxinimg" jdbcType="VARCHAR" />
+		<result column="emk1" property="emk1" jdbcType="VARCHAR" />
+		<result column="emk2" property="emk2" jdbcType="VARCHAR" />
+		<result column="emk3" property="emk3" jdbcType="VARCHAR" />
+		<result column="emk4" property="emk4" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		UserID, UserName, ParentID, CardID, Activity, Password,
+		CreateTime,
+		UserState, LostTime,
+		CityID, LvlID, Commission_Balance,
+		NotReceivedCommission, ReceivedCommission,
+		signShare,
+		signState,
+		winxinImg, emk1, emk2, emk3, emk4
+	</sql>
+
+	<select id="selectAgentByUserName" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from agent where userName = #{userName}
+	</select>
+	
+	<select id="selectAgentByUserId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from agent where UserID = #{userId}
+	</select>
+
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.yhb.bean.entity.AgentExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from agent
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from agent
+		where UserID = #{userid,jdbcType=VARCHAR}
+		and UserName = #{username,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from agent
+		where UserID = #{userid,jdbcType=VARCHAR}
+		and UserName = #{username,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.yhb.bean.entity.AgentExample">
+		delete from agent
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.yhb.bean.entity.Agent">
+		insert into agent (UserID, UserName, ParentID,
+		CardID, Activity, Password,
+		CreateTime, UserState, LostTime,
+		CityID, LvlID, Commission_Balance,
+		NotReceivedCommission, ReceivedCommission,
+		signShare, signState, winxinImg,
+		emk1, emk2, emk3, emk4
+		)
+		values (#{userid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+		#{parentid,jdbcType=VARCHAR},
+		#{cardid,jdbcType=VARCHAR}, #{activity,jdbcType=INTEGER}, #{password,jdbcType=VARCHAR},
+		#{createtime,jdbcType=TIMESTAMP}, #{userstate,jdbcType=INTEGER},
+		#{losttime,jdbcType=TIMESTAMP},
+		#{cityid,jdbcType=INTEGER}, #{lvlid,jdbcType=INTEGER}, #{commissionBalance,jdbcType=DECIMAL},
+		#{notreceivedcommission,jdbcType=DECIMAL},
+		#{receivedcommission,jdbcType=DECIMAL},
+		#{signshare,jdbcType=DECIMAL}, #{signstate,jdbcType=INTEGER},
+		#{winxinimg,jdbcType=VARCHAR},
+		#{emk1,jdbcType=VARCHAR}, #{emk2,jdbcType=VARCHAR},
+		#{emk3,jdbcType=VARCHAR}, #{emk4,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.yhb.bean.entity.Agent">
+		insert into agent
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				UserID,
+			</if>
+			<if test="username != null">
+				UserName,
+			</if>
+			<if test="parentid != null">
+				ParentID,
+			</if>
+			<if test="cardid != null">
+				CardID,
+			</if>
+			<if test="activity != null">
+				Activity,
+			</if>
+			<if test="password != null">
+				Password,
+			</if>
+			<if test="createtime != null">
+				CreateTime,
+			</if>
+			<if test="userstate != null">
+				UserState,
+			</if>
+			<if test="losttime != null">
+				LostTime,
+			</if>
+			<if test="cityid != null">
+				CityID,
+			</if>
+			<if test="lvlid != null">
+				LvlID,
+			</if>
+			<if test="commissionBalance != null">
+				Commission_Balance,
+			</if>
+			<if test="notreceivedcommission != null">
+				NotReceivedCommission,
+			</if>
+			<if test="receivedcommission != null">
+				ReceivedCommission,
+			</if>
+			<if test="signshare != null">
+				signShare,
+			</if>
+			<if test="signstate != null">
+				signState,
+			</if>
+			<if test="winxinimg != null">
+				winxinImg,
+			</if>
+			<if test="emk1 != null">
+				emk1,
+			</if>
+			<if test="emk2 != null">
+				emk2,
+			</if>
+			<if test="emk3 != null">
+				emk3,
+			</if>
+			<if test="emk4 != null">
+				emk4,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				#{userid,jdbcType=VARCHAR},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="parentid != null">
+				#{parentid,jdbcType=VARCHAR},
+			</if>
+			<if test="cardid != null">
+				#{cardid,jdbcType=VARCHAR},
+			</if>
+			<if test="activity != null">
+				#{activity,jdbcType=INTEGER},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userstate != null">
+				#{userstate,jdbcType=INTEGER},
+			</if>
+			<if test="losttime != null">
+				#{losttime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="cityid != null">
+				#{cityid,jdbcType=INTEGER},
+			</if>
+			<if test="lvlid != null">
+				#{lvlid,jdbcType=INTEGER},
+			</if>
+			<if test="commissionBalance != null">
+				#{commissionBalance,jdbcType=DECIMAL},
+			</if>
+			<if test="notreceivedcommission != null">
+				#{notreceivedcommission,jdbcType=DECIMAL},
+			</if>
+			<if test="receivedcommission != null">
+				#{receivedcommission,jdbcType=DECIMAL},
+			</if>
+			<if test="signshare != null">
+				#{signshare,jdbcType=DECIMAL},
+			</if>
+			<if test="signstate != null">
+				#{signstate,jdbcType=INTEGER},
+			</if>
+			<if test="winxinimg != null">
+				#{winxinimg,jdbcType=VARCHAR},
+			</if>
+			<if test="emk1 != null">
+				#{emk1,jdbcType=VARCHAR},
+			</if>
+			<if test="emk2 != null">
+				#{emk2,jdbcType=VARCHAR},
+			</if>
+			<if test="emk3 != null">
+				#{emk3,jdbcType=VARCHAR},
+			</if>
+			<if test="emk4 != null">
+				#{emk4,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.yhb.bean.entity.AgentExample"
+		resultType="java.lang.Integer">
+		select count(*) from agent
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update agent
+		<set>
+			<if test="record.userid != null">
+				UserID = #{record.userid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.username != null">
+				UserName = #{record.username,jdbcType=VARCHAR},
+			</if>
+			<if test="record.parentid != null">
+				ParentID = #{record.parentid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.cardid != null">
+				CardID = #{record.cardid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.activity != null">
+				Activity = #{record.activity,jdbcType=INTEGER},
+			</if>
+			<if test="record.password != null">
+				Password = #{record.password,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createtime != null">
+				CreateTime = #{record.createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.userstate != null">
+				UserState = #{record.userstate,jdbcType=INTEGER},
+			</if>
+			<if test="record.losttime != null">
+				LostTime = #{record.losttime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.cityid != null">
+				CityID = #{record.cityid,jdbcType=INTEGER},
+			</if>
+			<if test="record.lvlid != null">
+				LvlID = #{record.lvlid,jdbcType=INTEGER},
+			</if>
+			<if test="record.commissionBalance != null">
+				Commission_Balance = #{record.commissionBalance,jdbcType=DECIMAL},
+			</if>
+			<if test="record.notreceivedcommission != null">
+				NotReceivedCommission =
+				#{record.notreceivedcommission,jdbcType=DECIMAL},
+			</if>
+			<if test="record.receivedcommission != null">
+				ReceivedCommission = #{record.receivedcommission,jdbcType=DECIMAL},
+			</if>
+			<if test="record.signshare != null">
+				signShare = #{record.signshare,jdbcType=DECIMAL},
+			</if>
+			<if test="record.signstate != null">
+				signState = #{record.signstate,jdbcType=INTEGER},
+			</if>
+			<if test="record.winxinimg != null">
+				winxinImg = #{record.winxinimg,jdbcType=VARCHAR},
+			</if>
+			<if test="record.emk1 != null">
+				emk1 = #{record.emk1,jdbcType=VARCHAR},
+			</if>
+			<if test="record.emk2 != null">
+				emk2 = #{record.emk2,jdbcType=VARCHAR},
+			</if>
+			<if test="record.emk3 != null">
+				emk3 = #{record.emk3,jdbcType=VARCHAR},
+			</if>
+			<if test="record.emk4 != null">
+				emk4 = #{record.emk4,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update agent
+		set UserID = #{record.userid,jdbcType=VARCHAR},
+		UserName = #{record.username,jdbcType=VARCHAR},
+		ParentID = #{record.parentid,jdbcType=VARCHAR},
+		CardID = #{record.cardid,jdbcType=VARCHAR},
+		Activity = #{record.activity,jdbcType=INTEGER},
+		Password = #{record.password,jdbcType=VARCHAR},
+		CreateTime = #{record.createtime,jdbcType=TIMESTAMP},
+		UserState = #{record.userstate,jdbcType=INTEGER},
+		LostTime = #{record.losttime,jdbcType=TIMESTAMP},
+		CityID = #{record.cityid,jdbcType=INTEGER},
+		LvlID = #{record.lvlid,jdbcType=INTEGER},
+		Commission_Balance = #{record.commissionBalance,jdbcType=DECIMAL},
+		NotReceivedCommission =
+		#{record.notreceivedcommission,jdbcType=DECIMAL},
+		ReceivedCommission = #{record.receivedcommission,jdbcType=DECIMAL},
+		signShare = #{record.signshare,jdbcType=DECIMAL},
+		signState = #{record.signstate,jdbcType=INTEGER},
+		winxinImg = #{record.winxinimg,jdbcType=VARCHAR},
+		emk1 = #{record.emk1,jdbcType=VARCHAR},
+		emk2 = #{record.emk2,jdbcType=VARCHAR},
+		emk3 = #{record.emk3,jdbcType=VARCHAR},
+		emk4 = #{record.emk4,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yhb.bean.entity.Agent">
+		update agent
+		<set>
+			<if test="parentid != null">
+				ParentID = #{parentid,jdbcType=VARCHAR},
+			</if>
+			<if test="cardid != null">
+				CardID = #{cardid,jdbcType=VARCHAR},
+			</if>
+			<if test="activity != null">
+				Activity = #{activity,jdbcType=INTEGER},
+			</if>
+			<if test="password != null">
+				Password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				CreateTime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userstate != null">
+				UserState = #{userstate,jdbcType=INTEGER},
+			</if>
+			<if test="losttime != null">
+				LostTime = #{losttime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="cityid != null">
+				CityID = #{cityid,jdbcType=INTEGER},
+			</if>
+			<if test="lvlid != null">
+				LvlID = #{lvlid,jdbcType=INTEGER},
+			</if>
+			<if test="commissionBalance != null">
+				Commission_Balance = #{commissionBalance,jdbcType=DECIMAL},
+			</if>
+			<if test="notreceivedcommission != null">
+				NotReceivedCommission = #{notreceivedcommission,jdbcType=DECIMAL},
+			</if>
+			<if test="receivedcommission != null">
+				ReceivedCommission = #{receivedcommission,jdbcType=DECIMAL},
+			</if>
+			<if test="signshare != null">
+				signShare = #{signshare,jdbcType=DECIMAL},
+			</if>
+			<if test="signstate != null">
+				signState = #{signstate,jdbcType=INTEGER},
+			</if>
+			<if test="winxinimg != null">
+				winxinImg = #{winxinimg,jdbcType=VARCHAR},
+			</if>
+			<if test="emk1 != null">
+				emk1 = #{emk1,jdbcType=VARCHAR},
+			</if>
+			<if test="emk2 != null">
+				emk2 = #{emk2,jdbcType=VARCHAR},
+			</if>
+			<if test="emk3 != null">
+				emk3 = #{emk3,jdbcType=VARCHAR},
+			</if>
+			<if test="emk4 != null">
+				emk4 = #{emk4,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where UserID = #{userid,jdbcType=VARCHAR}
+		and UserName = #{username,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.yhb.bean.entity.Agent">
+		update agent
+		set ParentID = #{parentid,jdbcType=VARCHAR},
+		CardID = #{cardid,jdbcType=VARCHAR},
+		Activity = #{activity,jdbcType=INTEGER},
+		Password = #{password,jdbcType=VARCHAR},
+		CreateTime = #{createtime,jdbcType=TIMESTAMP},
+		UserState = #{userstate,jdbcType=INTEGER},
+		LostTime = #{losttime,jdbcType=TIMESTAMP},
+		CityID = #{cityid,jdbcType=INTEGER},
+		LvlID = #{lvlid,jdbcType=INTEGER},
+		Commission_Balance = #{commissionBalance,jdbcType=DECIMAL},
+		NotReceivedCommission = #{notreceivedcommission,jdbcType=DECIMAL},
+		ReceivedCommission = #{receivedcommission,jdbcType=DECIMAL},
+		signShare = #{signshare,jdbcType=DECIMAL},
+		signState = #{signstate,jdbcType=INTEGER},
+		winxinImg = #{winxinimg,jdbcType=VARCHAR},
+		emk1 = #{emk1,jdbcType=VARCHAR},
+		emk2 = #{emk2,jdbcType=VARCHAR},
+		emk3 = #{emk3,jdbcType=VARCHAR},
+		emk4 = #{emk4,jdbcType=VARCHAR}
+		where UserID = #{userid,jdbcType=VARCHAR}
+		and UserName = #{username,jdbcType=VARCHAR}
+	</update>
+</mapper>

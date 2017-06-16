@@ -1,0 +1,90 @@
+package com.yhb.service.product.impl;
+
+import com.google.common.collect.Lists;
+import com.yhb.bean.entity.FinanceproductsUsers;
+import com.yhb.dao.FinanceproductsUsersDao;
+import com.yhb.service.product.FinanceproductsUsersService;
+import com.yhb.util.DateUtils;
+import com.yhb.util.StringUtil;
+import com.yhb.vo.UserInvestRecordListVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by Administrator on 2017/5/15 0015.
+ */
+@Service
+@Transactional
+public class FinanceproductsUsersServiceImpl implements  FinanceproductsUsersService {
+
+    @Autowired
+    FinanceproductsUsersDao financeproductsUsersDao;
+
+
+    /**
+     *
+     * @Description: 获取用户资产
+     *
+     * @return：List<FinanceproductsUsers>
+     * @author: Krx
+     * @date: 2017年5月8日 下午3:53:53
+     */
+    @Override
+    public List<FinanceproductsUsers> getFinUserList(String userId) {
+        return null;
+    }
+
+    /**
+     *
+     * @Description: 获取用户投资记录
+     *
+     * @return：List<FinanceproductsUsers>
+     * @author: Krx
+     * @date: 2017年5月8日 下午3:53:53
+     */
+    @Override
+    public List<UserInvestRecordListVo> getUserInvestmentRecords(Integer id) {
+        //根据产品Id获取当前产品投资用户记录
+        List<FinanceproductsUsers> finUserList = financeproductsUsersDao.getUserInvestmentRecords(id);
+        List<UserInvestRecordListVo> InvestList = Lists.newArrayList();
+
+        if (StringUtil.isNotNull(finUserList)) {
+
+            for (FinanceproductsUsers financeproductsUsers: finUserList) {
+                //获取用户信息
+                String trueName = financeproductsUsers.getTrueName().replace(financeproductsUsers.getTrueName().substring(1, financeproductsUsers.getTrueName().length()), "**"); //账户姓名
+                String userName = financeproductsUsers.getUserName().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"); //账户
+                BigDecimal buyMoney = financeproductsUsers.getFproductsbuymoney().setScale(2, BigDecimal.ROUND_HALF_UP);//购买金额
+                Date time = financeproductsUsers.getFproductsbuytime();//购买时间
+
+                //创建vo实体传输对象
+                UserInvestRecordListVo vo = new UserInvestRecordListVo(trueName, userName, buyMoney, DateUtils.parseToDateTimeStr(time));
+                InvestList.add(vo);
+            }
+
+        }
+
+        return InvestList;
+    }
+
+    /**
+     *
+     * @Description: 购买产品
+     *
+     * @return：List<FinanceproductsUsers>
+     * @author: Krx
+     * @date: 2017年5月8日 下午3:53:53
+     */
+    @Override
+    public Map<String, Object> buyPro(Map<String, String> param) {
+
+
+        return null;
+    }
+}

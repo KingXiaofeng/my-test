@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yhb.dao.SystemLogDao" >
+  <resultMap id="BaseResultMap" type="com.yhb.bean.entity.SystemLog" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+    <result column="userName" property="username" jdbcType="VARCHAR" />
+    <result column="trueName" property="truename" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="isFallOrOk" property="isfallorok" jdbcType="INTEGER" />
+    <result column="oldMoney" property="oldmoney" jdbcType="DECIMAL" />
+    <result column="changeMoney" property="changemoney" jdbcType="DECIMAL" />
+    <result column="newMoney" property="newmoney" jdbcType="DECIMAL" />
+    <result column="describee" property="describee" jdbcType="VARCHAR" />
+    <result column="emk1" property="emk1" jdbcType="VARCHAR" />
+    <result column="emk2" property="emk2" jdbcType="VARCHAR" />
+    <result column="emk3" property="emk3" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yhb.bean.entity.SystemLog" extends="BaseResultMap" >
+    <result column="className" property="classname" jdbcType="LONGVARCHAR" />
+    <result column="methodName" property="methodname" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, userId, userName, trueName, createTime, endTime, isFallOrOk, oldMoney, changeMoney, 
+    newMoney, describee, emk1, emk2, emk3
+  </sql>
+  <sql id="Blob_Column_List" >
+    className, methodName
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.yhb.bean.entity.SystemLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from system_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yhb.bean.entity.SystemLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from system_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from system_log
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from system_log
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yhb.bean.entity.SystemLogExample" >
+    delete from system_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yhb.bean.entity.SystemLog" >
+    insert into system_log (Id, userId, userName, 
+      trueName, createTime, endTime, 
+      isFallOrOk, oldMoney, changeMoney, 
+      newMoney, describee, emk1, 
+      emk2, emk3, className, 
+      methodName)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
+      #{truename,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
+      #{isfallorok,jdbcType=INTEGER}, #{oldmoney,jdbcType=DECIMAL}, #{changemoney,jdbcType=DECIMAL}, 
+      #{newmoney,jdbcType=DECIMAL}, #{describee,jdbcType=VARCHAR}, #{emk1,jdbcType=VARCHAR}, 
+      #{emk2,jdbcType=VARCHAR}, #{emk3,jdbcType=VARCHAR}, #{classname,jdbcType=LONGVARCHAR}, 
+      #{methodname,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yhb.bean.entity.SystemLog" >
+    insert into system_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="username != null" >
+        userName,
+      </if>
+      <if test="truename != null" >
+        trueName,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+      <if test="isfallorok != null" >
+        isFallOrOk,
+      </if>
+      <if test="oldmoney != null" >
+        oldMoney,
+      </if>
+      <if test="changemoney != null" >
+        changeMoney,
+      </if>
+      <if test="newmoney != null" >
+        newMoney,
+      </if>
+      <if test="describee != null" >
+        describee,
+      </if>
+      <if test="emk1 != null" >
+        emk1,
+      </if>
+      <if test="emk2 != null" >
+        emk2,
+      </if>
+      <if test="emk3 != null" >
+        emk3,
+      </if>
+      <if test="classname != null" >
+        className,
+      </if>
+      <if test="methodname != null" >
+        methodName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="truename != null" >
+        #{truename,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isfallorok != null" >
+        #{isfallorok,jdbcType=INTEGER},
+      </if>
+      <if test="oldmoney != null" >
+        #{oldmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="changemoney != null" >
+        #{changemoney,jdbcType=DECIMAL},
+      </if>
+      <if test="newmoney != null" >
+        #{newmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="describee != null" >
+        #{describee,jdbcType=VARCHAR},
+      </if>
+      <if test="emk1 != null" >
+        #{emk1,jdbcType=VARCHAR},
+      </if>
+      <if test="emk2 != null" >
+        #{emk2,jdbcType=VARCHAR},
+      </if>
+      <if test="emk3 != null" >
+        #{emk3,jdbcType=VARCHAR},
+      </if>
+      <if test="classname != null" >
+        #{classname,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="methodname != null" >
+        #{methodname,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yhb.bean.entity.SystemLogExample" resultType="java.lang.Integer" >
+    select count(*) from system_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update system_log
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.userid != null" >
+        userId = #{record.userid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.username != null" >
+        userName = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.truename != null" >
+        trueName = #{record.truename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null" >
+        createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endtime != null" >
+        endTime = #{record.endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isfallorok != null" >
+        isFallOrOk = #{record.isfallorok,jdbcType=INTEGER},
+      </if>
+      <if test="record.oldmoney != null" >
+        oldMoney = #{record.oldmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.changemoney != null" >
+        changeMoney = #{record.changemoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.newmoney != null" >
+        newMoney = #{record.newmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.describee != null" >
+        describee = #{record.describee,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emk1 != null" >
+        emk1 = #{record.emk1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emk2 != null" >
+        emk2 = #{record.emk2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emk3 != null" >
+        emk3 = #{record.emk3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classname != null" >
+        className = #{record.classname,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.methodname != null" >
+        methodName = #{record.methodname,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update system_log
+    set Id = #{record.id,jdbcType=INTEGER},
+      userId = #{record.userid,jdbcType=VARCHAR},
+      userName = #{record.username,jdbcType=VARCHAR},
+      trueName = #{record.truename,jdbcType=VARCHAR},
+      createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      endTime = #{record.endtime,jdbcType=TIMESTAMP},
+      isFallOrOk = #{record.isfallorok,jdbcType=INTEGER},
+      oldMoney = #{record.oldmoney,jdbcType=DECIMAL},
+      changeMoney = #{record.changemoney,jdbcType=DECIMAL},
+      newMoney = #{record.newmoney,jdbcType=DECIMAL},
+      describee = #{record.describee,jdbcType=VARCHAR},
+      emk1 = #{record.emk1,jdbcType=VARCHAR},
+      emk2 = #{record.emk2,jdbcType=VARCHAR},
+      emk3 = #{record.emk3,jdbcType=VARCHAR},
+      className = #{record.classname,jdbcType=LONGVARCHAR},
+      methodName = #{record.methodname,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update system_log
+    set Id = #{record.id,jdbcType=INTEGER},
+      userId = #{record.userid,jdbcType=VARCHAR},
+      userName = #{record.username,jdbcType=VARCHAR},
+      trueName = #{record.truename,jdbcType=VARCHAR},
+      createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      endTime = #{record.endtime,jdbcType=TIMESTAMP},
+      isFallOrOk = #{record.isfallorok,jdbcType=INTEGER},
+      oldMoney = #{record.oldmoney,jdbcType=DECIMAL},
+      changeMoney = #{record.changemoney,jdbcType=DECIMAL},
+      newMoney = #{record.newmoney,jdbcType=DECIMAL},
+      describee = #{record.describee,jdbcType=VARCHAR},
+      emk1 = #{record.emk1,jdbcType=VARCHAR},
+      emk2 = #{record.emk2,jdbcType=VARCHAR},
+      emk3 = #{record.emk3,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yhb.bean.entity.SystemLog" >
+    update system_log
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        userName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="truename != null" >
+        trueName = #{truename,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isfallorok != null" >
+        isFallOrOk = #{isfallorok,jdbcType=INTEGER},
+      </if>
+      <if test="oldmoney != null" >
+        oldMoney = #{oldmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="changemoney != null" >
+        changeMoney = #{changemoney,jdbcType=DECIMAL},
+      </if>
+      <if test="newmoney != null" >
+        newMoney = #{newmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="describee != null" >
+        describee = #{describee,jdbcType=VARCHAR},
+      </if>
+      <if test="emk1 != null" >
+        emk1 = #{emk1,jdbcType=VARCHAR},
+      </if>
+      <if test="emk2 != null" >
+        emk2 = #{emk2,jdbcType=VARCHAR},
+      </if>
+      <if test="emk3 != null" >
+        emk3 = #{emk3,jdbcType=VARCHAR},
+      </if>
+      <if test="classname != null" >
+        className = #{classname,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="methodname != null" >
+        methodName = #{methodname,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yhb.bean.entity.SystemLog" >
+    update system_log
+    set userId = #{userid,jdbcType=VARCHAR},
+      userName = #{username,jdbcType=VARCHAR},
+      trueName = #{truename,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      endTime = #{endtime,jdbcType=TIMESTAMP},
+      isFallOrOk = #{isfallorok,jdbcType=INTEGER},
+      oldMoney = #{oldmoney,jdbcType=DECIMAL},
+      changeMoney = #{changemoney,jdbcType=DECIMAL},
+      newMoney = #{newmoney,jdbcType=DECIMAL},
+      describee = #{describee,jdbcType=VARCHAR},
+      emk1 = #{emk1,jdbcType=VARCHAR},
+      emk2 = #{emk2,jdbcType=VARCHAR},
+      emk3 = #{emk3,jdbcType=VARCHAR},
+      className = #{classname,jdbcType=LONGVARCHAR},
+      methodName = #{methodname,jdbcType=LONGVARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yhb.bean.entity.SystemLog" >
+    update system_log
+    set userId = #{userid,jdbcType=VARCHAR},
+      userName = #{username,jdbcType=VARCHAR},
+      trueName = #{truename,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      endTime = #{endtime,jdbcType=TIMESTAMP},
+      isFallOrOk = #{isfallorok,jdbcType=INTEGER},
+      oldMoney = #{oldmoney,jdbcType=DECIMAL},
+      changeMoney = #{changemoney,jdbcType=DECIMAL},
+      newMoney = #{newmoney,jdbcType=DECIMAL},
+      describee = #{describee,jdbcType=VARCHAR},
+      emk1 = #{emk1,jdbcType=VARCHAR},
+      emk2 = #{emk2,jdbcType=VARCHAR},
+      emk3 = #{emk3,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

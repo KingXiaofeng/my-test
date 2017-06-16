@@ -1,0 +1,168 @@
+package com.yhb.controller;
+
+import com.alibaba.fastjson.JSONObject;
+import com.yhb.base.BaseController;
+import com.yhb.bean.entity.ArticleDetail;
+import com.yhb.bean.entity.DealOrder;
+import com.yhb.enums.ResultEnum;
+import com.yhb.requesturl.IndexRequestUrl;
+import com.yhb.service.common.BaseConfigService;
+import com.yhb.service.news.NewsBulletinService;
+import com.yhb.service.product.FinanceproductsAdminService;
+import com.yhb.service.user.DealOrderService;
+import com.yhb.util.json.SpringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ * 
+ * @ClassName: SSOLoginController.java
+ * @Description: 首页
+ * @author:Krx
+ * @date: 2017年4月27日 下午3:28:46
+ */
+@Controller
+@RequestMapping(IndexRequestUrl.index)
+public class IndexController extends BaseController {
+	private static Logger logger = LoggerFactory.getLogger(IndexController.class);
+
+	@Autowired
+	FinanceproductsAdminService finAdminService;
+	@Autowired
+	BaseConfigService baseConfigService;
+	@Autowired
+	NewsBulletinService newsBulletinService;
+	@Autowired
+	DealOrderService dealOrderService;
+	
+	/**
+	 * 
+	* @Function: NewsBulletinController.java
+	* @Description: 首页新闻列表信息获取
+	*
+	* @param:
+	* @return：
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月10日 上午10:20:51 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月10日     wangxf           v1.0.0               修改原因
+	 */
+	@RequestMapping(IndexRequestUrl.getNewsForIndex)
+	public void getNewsForIndex(HttpServletRequest request,HttpServletResponse response){
+		
+		// 获取有效的新闻信息
+		List<ArticleDetail> articleDetailList = newsBulletinService.getNewsBulletinsInfo(new Byte("1"),1,"create_time DESC limit 8");
+		
+		if( null == articleDetailList || articleDetailList.size() < 1 ){
+			SpringUtils.renderJsonResult(response, ResultEnum.NEWS_QUERY_ERROR.getCode(), ResultEnum.NEWS_QUERY_ERROR.getCodeDesc());
+			return;
+		}
+		
+		// 出参的Map集合
+		Map<String, List<Map<String, Object>>> returnList = newsBulletinService.createReturnMap(articleDetailList);
+		
+		if( null == returnList || returnList.size() < 1 ){
+			SpringUtils.renderJsonResult(response, ResultEnum.NEWS_TRANSFER_ERROR.getCode(), ResultEnum.NEWS_TRANSFER_ERROR.getCodeDesc());
+			return;
+		}
+		
+		String returnJson = JSONObject.toJSONString(returnList);
+		SpringUtils.renderJson(response, returnJson);
+	}
+	
+	/**
+	 * 
+	* @Function: IndexController.java
+	* @Description: 获取投资记录信息
+	*
+	* @param: 
+	* @return： 
+	* @throws： 
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月11日 上午10:05:51 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月11日     wangxf           v1.0.0               修改原因
+	 */
+	@RequestMapping(IndexRequestUrl.getInvestRecord)
+	public void getInvestmentRecord(HttpServletRequest request , HttpServletResponse response){
+		
+		// 获取投资记录
+		List<DealOrder> dealOrderList = dealOrderService.selectInvestmentRecord();
+		
+		if( null == dealOrderList || dealOrderList.size() < 1 ){
+			SpringUtils.renderJsonResult(response, ResultEnum.INVEST_QUERY_ERROR.getCode(), ResultEnum.INVEST_QUERY_ERROR.getCodeDesc());
+			return;
+		}
+		
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = null;
+		
+		
+		
+		for( DealOrder dealOrder : dealOrderList ){
+			map = new HashMap<String, Object>();
+			map.put("phone", dealOrder.getUserName());
+			map.put("money", dealOrder.getOrdermoney().intValue());
+			returnList.add(map);
+		}
+		
+		SpringUtils.renderJson(response, JSONObject.toJSONString(returnList));
+	}
+
+	/**
+	 *
+	 * @Function: IndexController.java
+	 * @Description: 平台是否开启交易
+	 *
+	 * @param:
+	 * @return：
+	 * @throws：
+	 *
+	 * @version: v1.0.0
+	 * @author: wangxf
+	 * @date: 2017年6月9日 上午10:05:51
+	 *
+	 * Modification History:
+	 * Date         Author          Version            Description
+	 *---------------------------------------------------------*
+	 * 2017年6月9日     wangxf           v1.0.0               修改原因
+	 */
+	@RequestMapping(IndexRequestUrl.getTransaction)
+	public void getTransaction(HttpServletRequest request , HttpServletResponse response){
+		String trade = baseConfigService.selectByParam("cfg_trade").getRes1();
+
+		boolean flag = false;
+		Map<String,Boolean> returnMap = new HashMap<String,Boolean>();
+		if( null != trade && !"".equals(trade) ){
+			if ( "true".equals(trade) ) {
+				flag = true;
+			}
+		}
+
+		returnMap.put("trade", flag);
+		SpringUtils.renderJson(response, JSONObject.toJSONString(returnMap));
+	}
+
+}

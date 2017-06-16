@@ -1,0 +1,62 @@
+package com.yhb.service.activity.impl;
+
+import com.google.common.collect.Maps;
+import com.yhb.bean.entity.AccountRaiseGet;
+import com.yhb.bean.entity.AccountUsersActivity;
+import com.yhb.bean.entity.ExperienceSend;
+import com.yhb.service.activity.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ *
+ * @ClassName: CommonActivityServiceImpl.java
+ * @Description: 公共的活动礼券实现类
+ * @author:Krx
+ * @date: 2017年5月16日 上午11:01:06
+ */
+@Service
+public class CommonActivityServiceImpl implements CommonActivityService {
+
+    @Autowired
+    ExperienceSendService experienceSendService;
+    @Autowired
+    ExperienceuserBuycpService experienceuserBuycpService;
+    @Autowired
+    AccountUsersActivityService accountUsersActivityService;
+    @Autowired
+    RedBuyProService redBuyProService;
+    @Autowired
+    AccountRaiseGetService accountRaiseGetService;
+    @Autowired
+    RaiseBuyProService raiseBuyProService;
+
+
+    /**
+     * @Description: 根据UserId获取用户活动礼券
+     * @param: userId
+     * @return：List
+     * @author: Krx
+     * @date: 2017年5月8日 下午3:47:16
+     */
+    @Override
+    public Map<String, Object> getUserActivity(String userId, Integer id,String ...type) {
+        Map<String, Object> returnMap = Maps.newHashMap();
+        //获取加息劵
+        List<AccountRaiseGet> accountRaiseGetList = accountRaiseGetService.getUserRaise(userId, id);
+        //获取红包
+        List<AccountUsersActivity> accountUsersActivityList = accountUsersActivityService.getUserRed(userId, id);
+        //获取体验金
+        List<ExperienceSend> experienceSendList = experienceSendService.getExperience(userId, id);
+
+        returnMap.put("raise", accountRaiseGetList == null ? null : accountRaiseGetList);
+        returnMap.put("red", accountUsersActivityList == null ? null : accountUsersActivityList);
+        returnMap.put("experience", experienceSendList == null ? null : experienceSendList);
+
+        return returnMap;
+    }
+}

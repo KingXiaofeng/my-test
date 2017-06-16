@@ -1,0 +1,15 @@
+package com.yhb.requesturl;
+
+/**
+ * 活动礼券
+ * Created by Krx on 2017/6/7 0007.
+ */
+public class ActivityRequestUrl {
+    //入口
+    public static final String act = "act/";
+    //根据UserId,id获取用户活动礼券
+    public static final String actbuy = "actbuy";
+    //礼券中心
+    public static final String coupon = "coupon";
+
+}

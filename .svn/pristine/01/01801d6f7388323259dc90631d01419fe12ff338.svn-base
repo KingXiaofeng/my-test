@@ -1,0 +1,30 @@
+package com.yhb.dao;
+
+import com.yhb.bean.entity.AccountUserActivity;
+import com.yhb.bean.entity.AccountUserActivityExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+
+public interface AccountUserActivityDao {
+    int countByExample(AccountUserActivityExample example);
+
+    int deleteByExample(AccountUserActivityExample example);
+
+    int deleteByPrimaryKey(Integer redid);
+
+    int insert(AccountUserActivity record);
+
+    int insertSelective(AccountUserActivity record);
+
+    List<AccountUserActivity> selectByExample(AccountUserActivityExample example);
+
+    AccountUserActivity selectByPrimaryKey(Integer redid);
+
+    int updateByExampleSelective(@Param("record") AccountUserActivity record, @Param("example") AccountUserActivityExample example);
+
+    int updateByExample(@Param("record") AccountUserActivity record, @Param("example") AccountUserActivityExample example);
+
+    int updateByPrimaryKeySelective(AccountUserActivity record);
+
+    int updateByPrimaryKey(AccountUserActivity record);
+}

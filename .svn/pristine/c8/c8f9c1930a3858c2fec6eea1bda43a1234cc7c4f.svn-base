@@ -1,0 +1,47 @@
+/**
+ *
+ */
+package com.yhb.service.activity.impl;
+
+import com.yhb.bean.entity.AccountUsersActivity;
+import com.yhb.bean.entity.AccountUsersActivityExample;
+import com.yhb.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.yhb.dao.AccountUsersActivityDao;
+import com.yhb.service.activity.AccountUsersActivityService;
+
+import java.util.List;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ *
+ * @ClassName: AccountUsersActivityServiceImpl.java
+ * @Description: 用户红包实现类
+ * @author:Krx
+ * @date: 2017年5月16日 上午11:02:47
+ */
+@Service
+@Transactional
+public class AccountUsersActivityServiceImpl implements AccountUsersActivityService {
+
+    @Autowired
+    AccountUsersActivityDao accountUsersActivityDao;
+
+    @Override
+    public List<AccountUsersActivity> getUserRed(String userId, Integer id, String... type) {
+        Integer state = 2;
+        if (StringUtil.isNotBlank(type.toString())) {
+            state = Integer.parseInt(type.toString());
+        }
+
+        AccountUsersActivityExample example = new AccountUsersActivityExample();
+        AccountUsersActivityExample.Criteria criteria = example.createCriteria();
+        criteria.andUseridEqualTo(userId);
+        criteria.andActivitystateEqualTo(state);
+        criteria.andFpidEqualTo(String.valueOf(id));
+        return accountUsersActivityDao.selectByExample(example);
+    }
+}

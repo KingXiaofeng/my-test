@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yhb.dao.LogMoneyChangeDao" >
+  <resultMap id="BaseResultMap" type="com.yhb.bean.entity.LogMoneyChange" >
+    <id column="MoneyChangeId" property="moneychangeid" jdbcType="INTEGER" />
+    <result column="UserId" property="userid" jdbcType="CHAR" />
+    <result column="UserName" property="username" jdbcType="VARCHAR" />
+    <result column="ChangeMoney" property="changemoney" jdbcType="DECIMAL" />
+    <result column="Poundage" property="poundage" jdbcType="DECIMAL" />
+    <result column="UserBalance" property="userbalance" jdbcType="DECIMAL" />
+    <result column="AddOrRemove" property="addorremove" jdbcType="VARCHAR" />
+    <result column="ExplainDes" property="explaindes" jdbcType="VARCHAR" />
+    <result column="SubmitDate" property="submitdate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yhb.bean.entity.LogMoneyChange" extends="BaseResultMap" >
+    <result column="TransactionUrl" property="transactionurl" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    MoneyChangeId, UserId, UserName, ChangeMoney, Poundage, UserBalance, AddOrRemove, 
+    ExplainDes, SubmitDate
+  </sql>
+  <sql id="Blob_Column_List" >
+    TransactionUrl
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.yhb.bean.entity.LogMoneyChangeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from log_money_change
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yhb.bean.entity.LogMoneyChangeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from log_money_change
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from log_money_change
+    where MoneyChangeId = #{moneychangeid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from log_money_change
+    where MoneyChangeId = #{moneychangeid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yhb.bean.entity.LogMoneyChangeExample" >
+    delete from log_money_change
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yhb.bean.entity.LogMoneyChange" >
+    insert into log_money_change (MoneyChangeId, UserId, UserName, 
+      ChangeMoney, Poundage, UserBalance, 
+      AddOrRemove, ExplainDes, SubmitDate, 
+      TransactionUrl)
+    values (#{moneychangeid,jdbcType=INTEGER}, #{userid,jdbcType=CHAR}, #{username,jdbcType=VARCHAR}, 
+      #{changemoney,jdbcType=DECIMAL}, #{poundage,jdbcType=DECIMAL}, #{userbalance,jdbcType=DECIMAL}, 
+      #{addorremove,jdbcType=VARCHAR}, #{explaindes,jdbcType=VARCHAR}, #{submitdate,jdbcType=TIMESTAMP}, 
+      #{transactionurl,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yhb.bean.entity.LogMoneyChange" >
+    insert into log_money_change
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="moneychangeid != null" >
+        MoneyChangeId,
+      </if>
+      <if test="userid != null" >
+        UserId,
+      </if>
+      <if test="username != null" >
+        UserName,
+      </if>
+      <if test="changemoney != null" >
+        ChangeMoney,
+      </if>
+      <if test="poundage != null" >
+        Poundage,
+      </if>
+      <if test="userbalance != null" >
+        UserBalance,
+      </if>
+      <if test="addorremove != null" >
+        AddOrRemove,
+      </if>
+      <if test="explaindes != null" >
+        ExplainDes,
+      </if>
+      <if test="submitdate != null" >
+        SubmitDate,
+      </if>
+      <if test="transactionurl != null" >
+        TransactionUrl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="moneychangeid != null" >
+        #{moneychangeid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=CHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="changemoney != null" >
+        #{changemoney,jdbcType=DECIMAL},
+      </if>
+      <if test="poundage != null" >
+        #{poundage,jdbcType=DECIMAL},
+      </if>
+      <if test="userbalance != null" >
+        #{userbalance,jdbcType=DECIMAL},
+      </if>
+      <if test="addorremove != null" >
+        #{addorremove,jdbcType=VARCHAR},
+      </if>
+      <if test="explaindes != null" >
+        #{explaindes,jdbcType=VARCHAR},
+      </if>
+      <if test="submitdate != null" >
+        #{submitdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transactionurl != null" >
+        #{transactionurl,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yhb.bean.entity.LogMoneyChangeExample" resultType="java.lang.Integer" >
+    select count(*) from log_money_change
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update log_money_change
+    <set >
+      <if test="record.moneychangeid != null" >
+        MoneyChangeId = #{record.moneychangeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userid != null" >
+        UserId = #{record.userid,jdbcType=CHAR},
+      </if>
+      <if test="record.username != null" >
+        UserName = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.changemoney != null" >
+        ChangeMoney = #{record.changemoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.poundage != null" >
+        Poundage = #{record.poundage,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userbalance != null" >
+        UserBalance = #{record.userbalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.addorremove != null" >
+        AddOrRemove = #{record.addorremove,jdbcType=VARCHAR},
+      </if>
+      <if test="record.explaindes != null" >
+        ExplainDes = #{record.explaindes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.submitdate != null" >
+        SubmitDate = #{record.submitdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.transactionurl != null" >
+        TransactionUrl = #{record.transactionurl,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update log_money_change
+    set MoneyChangeId = #{record.moneychangeid,jdbcType=INTEGER},
+      UserId = #{record.userid,jdbcType=CHAR},
+      UserName = #{record.username,jdbcType=VARCHAR},
+      ChangeMoney = #{record.changemoney,jdbcType=DECIMAL},
+      Poundage = #{record.poundage,jdbcType=DECIMAL},
+      UserBalance = #{record.userbalance,jdbcType=DECIMAL},
+      AddOrRemove = #{record.addorremove,jdbcType=VARCHAR},
+      ExplainDes = #{record.explaindes,jdbcType=VARCHAR},
+      SubmitDate = #{record.submitdate,jdbcType=TIMESTAMP},
+      TransactionUrl = #{record.transactionurl,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update log_money_change
+    set MoneyChangeId = #{record.moneychangeid,jdbcType=INTEGER},
+      UserId = #{record.userid,jdbcType=CHAR},
+      UserName = #{record.username,jdbcType=VARCHAR},
+      ChangeMoney = #{record.changemoney,jdbcType=DECIMAL},
+      Poundage = #{record.poundage,jdbcType=DECIMAL},
+      UserBalance = #{record.userbalance,jdbcType=DECIMAL},
+      AddOrRemove = #{record.addorremove,jdbcType=VARCHAR},
+      ExplainDes = #{record.explaindes,jdbcType=VARCHAR},
+      SubmitDate = #{record.submitdate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yhb.bean.entity.LogMoneyChange" >
+    update log_money_change
+    <set >
+      <if test="userid != null" >
+        UserId = #{userid,jdbcType=CHAR},
+      </if>
+      <if test="username != null" >
+        UserName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="changemoney != null" >
+        ChangeMoney = #{changemoney,jdbcType=DECIMAL},
+      </if>
+      <if test="poundage != null" >
+        Poundage = #{poundage,jdbcType=DECIMAL},
+      </if>
+      <if test="userbalance != null" >
+        UserBalance = #{userbalance,jdbcType=DECIMAL},
+      </if>
+      <if test="addorremove != null" >
+        AddOrRemove = #{addorremove,jdbcType=VARCHAR},
+      </if>
+      <if test="explaindes != null" >
+        ExplainDes = #{explaindes,jdbcType=VARCHAR},
+      </if>
+      <if test="submitdate != null" >
+        SubmitDate = #{submitdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transactionurl != null" >
+        TransactionUrl = #{transactionurl,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where MoneyChangeId = #{moneychangeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yhb.bean.entity.LogMoneyChange" >
+    update log_money_change
+    set UserId = #{userid,jdbcType=CHAR},
+      UserName = #{username,jdbcType=VARCHAR},
+      ChangeMoney = #{changemoney,jdbcType=DECIMAL},
+      Poundage = #{poundage,jdbcType=DECIMAL},
+      UserBalance = #{userbalance,jdbcType=DECIMAL},
+      AddOrRemove = #{addorremove,jdbcType=VARCHAR},
+      ExplainDes = #{explaindes,jdbcType=VARCHAR},
+      SubmitDate = #{submitdate,jdbcType=TIMESTAMP},
+      TransactionUrl = #{transactionurl,jdbcType=LONGVARCHAR}
+    where MoneyChangeId = #{moneychangeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yhb.bean.entity.LogMoneyChange" >
+    update log_money_change
+    set UserId = #{userid,jdbcType=CHAR},
+      UserName = #{username,jdbcType=VARCHAR},
+      ChangeMoney = #{changemoney,jdbcType=DECIMAL},
+      Poundage = #{poundage,jdbcType=DECIMAL},
+      UserBalance = #{userbalance,jdbcType=DECIMAL},
+      AddOrRemove = #{addorremove,jdbcType=VARCHAR},
+      ExplainDes = #{explaindes,jdbcType=VARCHAR},
+      SubmitDate = #{submitdate,jdbcType=TIMESTAMP}
+    where MoneyChangeId = #{moneychangeid,jdbcType=INTEGER}
+  </update>
+</mapper>

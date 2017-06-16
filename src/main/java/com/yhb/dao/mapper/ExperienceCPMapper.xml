@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yhb.dao.ExperienceCPDao" >
+  <resultMap id="BaseResultMap" type="com.yhb.bean.entity.ExperienceCP" >
+    <id column="ExperienceCPId" property="experiencecpid" jdbcType="INTEGER" />
+    <result column="productId" property="productid" jdbcType="VARCHAR" />
+    <result column="ExperienceCPRate" property="experiencecprate" jdbcType="DECIMAL" />
+    <result column="ExperienceCPAddTime" property="experiencecpaddtime" jdbcType="TIMESTAMP" />
+    <result column="ExperienceCPTimes" property="experiencecptimes" jdbcType="INTEGER" />
+    <result column="ExperienceCPCountMoeny" property="experiencecpcountmoeny" jdbcType="DECIMAL" />
+    <result column="ExperienceCPCountRate" property="experiencecpcountrate" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yhb.bean.entity.ExperienceCP" extends="BaseResultMap" >
+    <result column="ExperienceCPName" property="experiencecpname" jdbcType="LONGVARCHAR" />
+    <result column="ExperienceCPImg" property="experiencecpimg" jdbcType="LONGVARCHAR" />
+    <result column="ExperienceCPDes" property="experiencecpdes" jdbcType="LONGVARCHAR" />
+    <result column="ExperienceCPEm_k1" property="experiencecpemK1" jdbcType="LONGVARCHAR" />
+    <result column="ExperienceCPEm_k2" property="experiencecpemK2" jdbcType="LONGVARCHAR" />
+    <result column="ExperienceCPEm_k3" property="experiencecpemK3" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ExperienceCPId, productId, ExperienceCPRate, ExperienceCPAddTime, ExperienceCPTimes, 
+    ExperienceCPCountMoeny, ExperienceCPCountRate
+  </sql>
+  <sql id="Blob_Column_List" >
+    ExperienceCPName, ExperienceCPImg, ExperienceCPDes, ExperienceCPEm_k1, ExperienceCPEm_k2, 
+    ExperienceCPEm_k3
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.yhb.bean.entity.ExperienceCPExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from experiencecp
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yhb.bean.entity.ExperienceCPExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from experiencecp
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from experiencecp
+    where ExperienceCPId = #{experiencecpid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from experiencecp
+    where ExperienceCPId = #{experiencecpid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yhb.bean.entity.ExperienceCPExample" >
+    delete from experiencecp
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yhb.bean.entity.ExperienceCP" >
+    insert into experiencecp (ExperienceCPId, productId, ExperienceCPRate, 
+      ExperienceCPAddTime, ExperienceCPTimes, 
+      ExperienceCPCountMoeny, ExperienceCPCountRate, 
+      ExperienceCPName, ExperienceCPImg, 
+      ExperienceCPDes, ExperienceCPEm_k1, 
+      ExperienceCPEm_k2, ExperienceCPEm_k3
+      )
+    values (#{experiencecpid,jdbcType=INTEGER}, #{productid,jdbcType=VARCHAR}, #{experiencecprate,jdbcType=DECIMAL}, 
+      #{experiencecpaddtime,jdbcType=TIMESTAMP}, #{experiencecptimes,jdbcType=INTEGER}, 
+      #{experiencecpcountmoeny,jdbcType=DECIMAL}, #{experiencecpcountrate,jdbcType=DECIMAL}, 
+      #{experiencecpname,jdbcType=LONGVARCHAR}, #{experiencecpimg,jdbcType=LONGVARCHAR}, 
+      #{experiencecpdes,jdbcType=LONGVARCHAR}, #{experiencecpemK1,jdbcType=LONGVARCHAR}, 
+      #{experiencecpemK2,jdbcType=LONGVARCHAR}, #{experiencecpemK3,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yhb.bean.entity.ExperienceCP" >
+    insert into experiencecp
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="experiencecpid != null" >
+        ExperienceCPId,
+      </if>
+      <if test="productid != null" >
+        productId,
+      </if>
+      <if test="experiencecprate != null" >
+        ExperienceCPRate,
+      </if>
+      <if test="experiencecpaddtime != null" >
+        ExperienceCPAddTime,
+      </if>
+      <if test="experiencecptimes != null" >
+        ExperienceCPTimes,
+      </if>
+      <if test="experiencecpcountmoeny != null" >
+        ExperienceCPCountMoeny,
+      </if>
+      <if test="experiencecpcountrate != null" >
+        ExperienceCPCountRate,
+      </if>
+      <if test="experiencecpname != null" >
+        ExperienceCPName,
+      </if>
+      <if test="experiencecpimg != null" >
+        ExperienceCPImg,
+      </if>
+      <if test="experiencecpdes != null" >
+        ExperienceCPDes,
+      </if>
+      <if test="experiencecpemK1 != null" >
+        ExperienceCPEm_k1,
+      </if>
+      <if test="experiencecpemK2 != null" >
+        ExperienceCPEm_k2,
+      </if>
+      <if test="experiencecpemK3 != null" >
+        ExperienceCPEm_k3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="experiencecpid != null" >
+        #{experiencecpid,jdbcType=INTEGER},
+      </if>
+      <if test="productid != null" >
+        #{productid,jdbcType=VARCHAR},
+      </if>
+      <if test="experiencecprate != null" >
+        #{experiencecprate,jdbcType=DECIMAL},
+      </if>
+      <if test="experiencecpaddtime != null" >
+        #{experiencecpaddtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="experiencecptimes != null" >
+        #{experiencecptimes,jdbcType=INTEGER},
+      </if>
+      <if test="experiencecpcountmoeny != null" >
+        #{experiencecpcountmoeny,jdbcType=DECIMAL},
+      </if>
+      <if test="experiencecpcountrate != null" >
+        #{experiencecpcountrate,jdbcType=DECIMAL},
+      </if>
+      <if test="experiencecpname != null" >
+        #{experiencecpname,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencecpimg != null" >
+        #{experiencecpimg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencecpdes != null" >
+        #{experiencecpdes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencecpemK1 != null" >
+        #{experiencecpemK1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencecpemK2 != null" >
+        #{experiencecpemK2,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencecpemK3 != null" >
+        #{experiencecpemK3,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yhb.bean.entity.ExperienceCPExample" resultType="java.lang.Integer" >
+    select count(*) from experiencecp
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update experiencecp
+    <set >
+      <if test="record.experiencecpid != null" >
+        ExperienceCPId = #{record.experiencecpid,jdbcType=INTEGER},
+      </if>
+      <if test="record.productid != null" >
+        productId = #{record.productid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.experiencecprate != null" >
+        ExperienceCPRate = #{record.experiencecprate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.experiencecpaddtime != null" >
+        ExperienceCPAddTime = #{record.experiencecpaddtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.experiencecptimes != null" >
+        ExperienceCPTimes = #{record.experiencecptimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.experiencecpcountmoeny != null" >
+        ExperienceCPCountMoeny = #{record.experiencecpcountmoeny,jdbcType=DECIMAL},
+      </if>
+      <if test="record.experiencecpcountrate != null" >
+        ExperienceCPCountRate = #{record.experiencecpcountrate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.experiencecpname != null" >
+        ExperienceCPName = #{record.experiencecpname,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.experiencecpimg != null" >
+        ExperienceCPImg = #{record.experiencecpimg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.experiencecpdes != null" >
+        ExperienceCPDes = #{record.experiencecpdes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.experiencecpemK1 != null" >
+        ExperienceCPEm_k1 = #{record.experiencecpemK1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.experiencecpemK2 != null" >
+        ExperienceCPEm_k2 = #{record.experiencecpemK2,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.experiencecpemK3 != null" >
+        ExperienceCPEm_k3 = #{record.experiencecpemK3,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update experiencecp
+    set ExperienceCPId = #{record.experiencecpid,jdbcType=INTEGER},
+      productId = #{record.productid,jdbcType=VARCHAR},
+      ExperienceCPRate = #{record.experiencecprate,jdbcType=DECIMAL},
+      ExperienceCPAddTime = #{record.experiencecpaddtime,jdbcType=TIMESTAMP},
+      ExperienceCPTimes = #{record.experiencecptimes,jdbcType=INTEGER},
+      ExperienceCPCountMoeny = #{record.experiencecpcountmoeny,jdbcType=DECIMAL},
+      ExperienceCPCountRate = #{record.experiencecpcountrate,jdbcType=DECIMAL},
+      ExperienceCPName = #{record.experiencecpname,jdbcType=LONGVARCHAR},
+      ExperienceCPImg = #{record.experiencecpimg,jdbcType=LONGVARCHAR},
+      ExperienceCPDes = #{record.experiencecpdes,jdbcType=LONGVARCHAR},
+      ExperienceCPEm_k1 = #{record.experiencecpemK1,jdbcType=LONGVARCHAR},
+      ExperienceCPEm_k2 = #{record.experiencecpemK2,jdbcType=LONGVARCHAR},
+      ExperienceCPEm_k3 = #{record.experiencecpemK3,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update experiencecp
+    set ExperienceCPId = #{record.experiencecpid,jdbcType=INTEGER},
+      productId = #{record.productid,jdbcType=VARCHAR},
+      ExperienceCPRate = #{record.experiencecprate,jdbcType=DECIMAL},
+      ExperienceCPAddTime = #{record.experiencecpaddtime,jdbcType=TIMESTAMP},
+      ExperienceCPTimes = #{record.experiencecptimes,jdbcType=INTEGER},
+      ExperienceCPCountMoeny = #{record.experiencecpcountmoeny,jdbcType=DECIMAL},
+      ExperienceCPCountRate = #{record.experiencecpcountrate,jdbcType=DECIMAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yhb.bean.entity.ExperienceCP" >
+    update experiencecp
+    <set >
+      <if test="productid != null" >
+        productId = #{productid,jdbcType=VARCHAR},
+      </if>
+      <if test="experiencecprate != null" >
+        ExperienceCPRate = #{experiencecprate,jdbcType=DECIMAL},
+      </if>
+      <if test="experiencecpaddtime != null" >
+        ExperienceCPAddTime = #{experiencecpaddtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="experiencecptimes != null" >
+        ExperienceCPTimes = #{experiencecptimes,jdbcType=INTEGER},
+      </if>
+      <if test="experiencecpcountmoeny != null" >
+        ExperienceCPCountMoeny = #{experiencecpcountmoeny,jdbcType=DECIMAL},
+      </if>
+      <if test="experiencecpcountrate != null" >
+        ExperienceCPCountRate = #{experiencecpcountrate,jdbcType=DECIMAL},
+      </if>
+      <if test="experiencecpname != null" >
+        ExperienceCPName = #{experiencecpname,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencecpimg != null" >
+        ExperienceCPImg = #{experiencecpimg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencecpdes != null" >
+        ExperienceCPDes = #{experiencecpdes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencecpemK1 != null" >
+        ExperienceCPEm_k1 = #{experiencecpemK1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencecpemK2 != null" >
+        ExperienceCPEm_k2 = #{experiencecpemK2,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencecpemK3 != null" >
+        ExperienceCPEm_k3 = #{experiencecpemK3,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ExperienceCPId = #{experiencecpid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yhb.bean.entity.ExperienceCP" >
+    update experiencecp
+    set productId = #{productid,jdbcType=VARCHAR},
+      ExperienceCPRate = #{experiencecprate,jdbcType=DECIMAL},
+      ExperienceCPAddTime = #{experiencecpaddtime,jdbcType=TIMESTAMP},
+      ExperienceCPTimes = #{experiencecptimes,jdbcType=INTEGER},
+      ExperienceCPCountMoeny = #{experiencecpcountmoeny,jdbcType=DECIMAL},
+      ExperienceCPCountRate = #{experiencecpcountrate,jdbcType=DECIMAL},
+      ExperienceCPName = #{experiencecpname,jdbcType=LONGVARCHAR},
+      ExperienceCPImg = #{experiencecpimg,jdbcType=LONGVARCHAR},
+      ExperienceCPDes = #{experiencecpdes,jdbcType=LONGVARCHAR},
+      ExperienceCPEm_k1 = #{experiencecpemK1,jdbcType=LONGVARCHAR},
+      ExperienceCPEm_k2 = #{experiencecpemK2,jdbcType=LONGVARCHAR},
+      ExperienceCPEm_k3 = #{experiencecpemK3,jdbcType=LONGVARCHAR}
+    where ExperienceCPId = #{experiencecpid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yhb.bean.entity.ExperienceCP" >
+    update experiencecp
+    set productId = #{productid,jdbcType=VARCHAR},
+      ExperienceCPRate = #{experiencecprate,jdbcType=DECIMAL},
+      ExperienceCPAddTime = #{experiencecpaddtime,jdbcType=TIMESTAMP},
+      ExperienceCPTimes = #{experiencecptimes,jdbcType=INTEGER},
+      ExperienceCPCountMoeny = #{experiencecpcountmoeny,jdbcType=DECIMAL},
+      ExperienceCPCountRate = #{experiencecpcountrate,jdbcType=DECIMAL}
+    where ExperienceCPId = #{experiencecpid,jdbcType=INTEGER}
+  </update>
+</mapper>

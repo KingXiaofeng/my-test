@@ -1,0 +1,88 @@
+package com.yhb.controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.yhb.requesturl.BannerManageRequestUrl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.yhb.base.BaseController;
+import com.yhb.bean.entity.BannerManage;
+import com.yhb.enums.ResultEnum;
+import com.yhb.service.common.BannerManageService;
+import com.yhb.util.RequestUtils;
+import com.yhb.util.json.SpringUtils;
+
+/**
+ * 
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ * 
+ * @ClassName: BannerManageController.java
+ * @Description: 图片轮播
+ *
+ * @version: v1.0.0
+ * @author: wqw
+ * @date: 2017年5月9日 下午1:41:45
+ *
+ *        Modification History: Date Author Version Description
+ *        ---------------------------------------------------------* 2017年5月9日
+ *        admin v1.0.0 修改原因
+ */
+@Controller
+@RequestMapping(BannerManageRequestUrl.banner)
+public class BannerManageController extends BaseController {
+	private static Logger logger = LoggerFactory.getLogger(BannerManageController.class);
+
+	@Autowired
+	BannerManageService bannerManageService;
+
+	/**
+	 * 
+	 * Copyright: Copyright (c) 2017 LanRu-Caifu
+	 * 
+	 * @ClassName: BannerManageController.java
+	 * @Description: 获取首页图片轮播
+	 *
+	 * @version: v1.0.0
+	 * @author: wqw
+	 * @date: 2017年5月9日 下午1:41:45
+	 *
+	 *        Modification History: Date Author Version Description
+	 *        ---------------------------------------------------------* 2017年5月9日
+	 *        admin v1.0.0 修改原因
+	 */
+	@RequestMapping(BannerManageRequestUrl.getBannerPage)
+	public void bannerPage(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			List<Map<String, Object>> dataList = new ArrayList<>();
+			List<BannerManage> bannerList = bannerManageService.selectByExample(1);
+			if (bannerList == null || bannerList.size() == 0) {
+				SpringUtils.renderJsonResult(response, ResultEnum.BANNER_QUERY_ERROR.getCode(),
+						ResultEnum.BANNER_QUERY_ERROR.getCodeDesc());
+				return;
+			}
+			for (int i = 0; i < bannerList.size(); i++) {
+				BannerManage bm = bannerList.get(i);
+				Map<String, Object> map = new HashMap<>();
+				map.put("path", RequestUtils.getRequestPath(null) + bm.getImg());
+				map.put("url", bm.getUrl());
+				dataList.add(map);
+			}
+			SpringUtils.renderJson(response, dataList);
+		} catch (Exception e) {
+			logger.error("广告图查询出错：" + e.getMessage());
+			e.printStackTrace();
+		}
+
+	}
+
+}

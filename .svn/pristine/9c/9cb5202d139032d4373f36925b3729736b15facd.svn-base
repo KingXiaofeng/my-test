@@ -1,0 +1,36 @@
+package com.yhb.dao;
+
+import com.yhb.bean.entity.BaseBankcard;
+import com.yhb.bean.entity.BaseBankcardExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+
+public interface BaseBankcardDao {
+    int countByExample(BaseBankcardExample example);
+
+    int deleteByExample(BaseBankcardExample example);
+
+    int deleteByPrimaryKey(Integer bankcardid);
+
+    int insert(BaseBankcard record);
+
+    int insertSelective(BaseBankcard record);
+
+    List<BaseBankcard> selectByExampleWithBLOBs(BaseBankcardExample example);
+
+    List<BaseBankcard> selectByExample(BaseBankcardExample example);
+
+    BaseBankcard selectByPrimaryKey(Integer bankcardid);
+
+    int updateByExampleSelective(@Param("record") BaseBankcard record, @Param("example") BaseBankcardExample example);
+
+    int updateByExampleWithBLOBs(@Param("record") BaseBankcard record, @Param("example") BaseBankcardExample example);
+
+    int updateByExample(@Param("record") BaseBankcard record, @Param("example") BaseBankcardExample example);
+
+    int updateByPrimaryKeySelective(BaseBankcard record);
+
+    int updateByPrimaryKeyWithBLOBs(BaseBankcard record);
+
+    int updateByPrimaryKey(BaseBankcard record);
+}

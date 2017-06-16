@@ -1,0 +1,33 @@
+/**
+ * 
+ */
+package com.yhb.service.common.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.yhb.bean.entity.BaseConfig;
+import com.yhb.dao.BaseConfigDao;
+import com.yhb.service.common.BaseConfigService;
+
+/**   
+* Copyright: Copyright (c) 2017 LanRu-Caifu
+* 
+* @ClassName: BaseConfigServiceImpl.java
+* @Description: 配置实现类
+* @author:Krx
+* @date: 2017年5月8日 下午3:47:51 
+*/
+@Service
+public class BaseConfigServiceImpl  implements BaseConfigService {
+
+	@Autowired
+	BaseConfigDao  baseConfigDao;
+
+	@Override
+	public BaseConfig selectByParam(String param) {
+		return this.baseConfigDao.selectByParam(param);
+	}
+	
+
+}

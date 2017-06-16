@@ -1,0 +1,89 @@
+package com.yhb.controller;
+
+import com.fasterxml.jackson.databind.deser.Deserializers;
+import com.google.common.collect.Maps;
+import com.yhb.base.BaseController;
+import com.yhb.bean.entity.AccountsUsers;
+import com.yhb.bean.entity.AccountsUsersBalances;
+import com.yhb.bean.entity.BaseConfig;
+import com.yhb.service.common.BaseConfigService;
+import com.yhb.service.user.AccountsUsersBalancesService;
+import com.yhb.util.cache.RedisCache;
+import com.yhb.util.json.SpringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ *
+ * @ClassName:_AccountsUsersCenterController.java
+ * @Description: 用户中心
+ * @author:Krx
+ * @date: 2017年4月27日 下午3:05:11
+ */
+@Controller
+@RequestMapping("con/")
+public class CommonController extends BaseController{
+
+    @Autowired
+    RedisCache cache;
+    @Autowired
+    AccountsUsersBalancesService balanceService;
+    @Autowired
+    BaseConfigService configService;
+
+    /**
+     *
+     * @Description: 获取公共用户余额信息
+     *
+     * @param:param
+     * @return：返回结果描述  ,
+     @RequestBody Map<String, String> param
+      * @author: Krx
+     * @date: 2017年5月12日 下午1:17:57
+     */
+    @RequestMapping("commonInfo")
+    public void commonUserInfo(HttpServletResponse response, @RequestBody Map<String, String> param){
+        // 验证token 是否存在
+        if (cache.tokenExit(param.get("token"))) {
+            returnMap = Maps.newHashMap();
+
+            // 获取用户信息
+            AccountsUsers users = cache.getUserRedis(param.get("token"), 1, AccountsUsers.class);
+            //获取用户余额
+            AccountsUsersBalances balance = balanceService.selectByUserId(users.getUserid());
+
+            returnMap.put("balance", balance.getUserbalance());//余额
+            returnMap.put("freeze", balance.getUserfreeze());//冻结金额
+
+            returnVo.setDatas(returnMap);
+            returnVo.setStatus(true);
+        }
+        SpringUtils.renderJson(response, returnVo);
+    }
+
+
+
+    /**
+     *
+     * @Description: 获取公共配置
+     *
+     * @param:param
+     * @return：返回结果描述  ,
+     *@RequestBody Map<String, String> param
+     * @author: Krx
+     * @date: 2017年5月12日 下午1:17:57
+     */
+    @RequestMapping("conBase")
+    public void commonUserInfo(HttpServletResponse response, HttpServletRequest request){
+        List<BaseConfig> baseConfigList = configService.getAllBaseConfig();
+        SpringUtils.renderJson(response, baseConfigList);
+    }
+}

@@ -1,0 +1,98 @@
+package com.yhb.service.activity.impl;
+
+import com.google.common.collect.Maps;
+import com.yhb.bean.entity.AccountRaiseGet;
+import com.yhb.bean.entity.AccountUsersActivity;
+import com.yhb.bean.entity.ExperienceSend;
+import com.yhb.service.activity.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ *
+ * @ClassName: CommonActivityServiceImpl.java
+ * @Description: 公共的活动礼券实现类
+ * @author:Krx
+ * @date: 2017年5月16日 上午11:01:06
+ */
+@Service
+public class CommonActivityServiceImpl implements CommonActivityService {
+
+    @Autowired
+    ExperienceSendService experienceSendService;
+    @Autowired
+    ExperienceuserBuycpService experienceuserBuycpService;
+    @Autowired
+    AccountUsersActivityService accountUsersActivityService;
+    @Autowired
+    RedBuyProService redBuyProService;
+    @Autowired
+    AccountRaiseGetService accountRaiseGetService;
+    @Autowired
+    RaiseBuyProService raiseBuyProService;
+
+    //通用map
+    static Map<String, Object> returnMap = null;
+
+
+    /**
+     * @Description: 根据UserId获取用户活动礼券
+     * @param: userId
+     * @return：List
+     * @author: Krx
+     * @date: 2017年5月8日 下午3:47:16
+     */
+    @Override
+    public Map<String, Object> getUserActivity(String userId, Integer id,String ...type) {
+        //id为产品Id
+        // type 表示生命周期 未用 已用 过期
+        //userId 表示用户的唯一表示Id
+        returnMap = Maps.newHashMap();
+        //获取加息劵
+        List<AccountRaiseGet> accountRaiseGetList = accountRaiseGetService.getUserRaise(userId, id);
+        //获取红包
+        List<AccountUsersActivity> accountUsersActivityList = accountUsersActivityService.getUserRed(userId, id);
+        //获取体验金
+        List<ExperienceSend> experienceSendList = experienceSendService.getExperience(userId, id);
+
+        returnMap.put("raise", accountRaiseGetList == null ? null : accountRaiseGetList);
+        returnMap.put("red", accountUsersActivityList == null ? null : accountUsersActivityList);
+        returnMap.put("experience", experienceSendList == null ? null : experienceSendList);
+
+        return returnMap;
+    }
+
+
+    /**
+     * @param userId
+     * @param type
+     * @Description: 我的礼券根据UserId, id获取用户活动礼券
+     * @param: userId
+     * @return：List
+     * @author: Krx
+     * @date: 2017年5月8日 下午3:47:16
+     */
+    @Override
+    public Map<String, Object> getMyCoupon(String userId,Integer state ,Integer type) {
+        returnMap = Maps.newHashMap();
+        //type 为1.红包,2.加息劵,3.体验金4.分享金
+        //state 表示礼券的生命周期  过期，已用，未用
+        //userId 表示用户的唯一表示Id
+        if(type == 1){
+            List<AccountUsersActivity> accountUsersActivityList = accountUsersActivityService.getUserRed(userId, null, String.valueOf(state));
+            //封装参数
+        }else if(type == 2){
+            List<ExperienceSend> experienceSendList = experienceSendService.getExperience(userId,null,String.valueOf(state));
+            //封装参数
+        } else if (type == 3) {
+            List<AccountRaiseGet> accountRaiseGetList = accountRaiseGetService.getUserRaise(userId, null, String.valueOf(state));
+            //封装参数
+        }
+
+        return returnMap;
+    }
+}

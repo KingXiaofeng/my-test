@@ -1,0 +1,225 @@
+#DB Sql
+jdbc.driverClassName=com.mysql.jdbc.Driver
+
+jdbc.url=jdbc:mysql://139.196.25.57:36297/yhb_29?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false
+jdbc.username=user
+jdbc.password=qweasd
+
+druid.pool.size.max=20
+druid.pool.size.min=3
+druid.pool.size.init=3
+
+
+
+
+#redis config
+#redis.pass=yingjun
+redis.pool.maxTotal=105
+redis.pool.maxIdle=10
+redis.pool.maxWaitMillis=5000
+redis.pool.testOnBorrow=true
+
+#redis \u5355\u8282\u70B9\u914D\u7F6E
+redis.ip=127.0.0.1
+redis.port=6379
+
+#redis \u9AD8\u53EF\u7528\u914D\u7F6E(\u57FA\u4E8Eredis sentinel)
+#sentinel1.ip=192.168.11.100
+#sentinel1.port=63791
+#sentinel2.ip=192.168.11.101
+#sentinel2.port=63792
+#sentinel3.ip=192.168.11.102
+#sentinel3.port=63792
+
+#redis \u96C6\u7FA4\u9AD8\u53EF\u7528\u914D\u7F6E\uFF08\u57FA\u4E8Ereids cluster\uFF09
+#redis.ip1=192.168.11.100
+#redis.port1=7111
+#redis.ip2=192.168.11.101
+#redis.port2=7112
+#redis.ip3=192.168.11.102
+#redis.port3=7113
+#redis.ip4=192.168.11.103
+#redis.port4=7114
+#redis.ip5=192.168.11.104
+#redis.port5=7115
+#redis.ip6=192.168.11.105
+#redis.port6=7116
+
+
+#redisUtil
+master.redis.ip=127.0.0.1
+master.redis.port=6379
+#master.redis.password=FNFl9F2O2Skb8yoKM0jhHA==
+master.redis.max_active=500
+master.redis.max_idle=5
+master.redis.max_wait=10000
+master.redis.timeout=10000
+
+#common
+#后台请求路径
+SYSTEM.ADMIN.REQUEST.URL = /admin/yhb
+#分享金最大金额
+SYSTEM.ADMIN.SHARINGMONEY.MAXMONEY = 500000
+#分享金最小金额
+SYSTEM.ADMIN.SHARINGMONEY.MINMONEY = 1000
+#分享金使用比例
+SYSTEM.ADMIN.SHARINGMONEY.Scale = 4
+#违约配置
+SYSTEM.ADMIN.WEIYUE.Scale = 0.05
+#系统路径
+SYSTEM.URL= http://www.yhb118.com/toRegister.do?user_ek2=
+
+
+###########短信配置#######################################
+#是否发短信提醒
+SYSTEM.SEND.SMS.ON = true
+#短信配置
+#uri =https://106.ihuyi.com/webservice/sms.php?method=Submit
+uri = http://www.dh3t.com
+#大汉三通
+#Dhst.URL=http://www.dh3t.com/json/sms/Submit
+#短信账户
+YX_account=dh18002
+account = dh18001
+#account =cf_jiesu
+#账户密码
+YX_password=D58yyo39
+password = RrKjLZ8y
+#password =v4CGMn
+
+
+
+#############环迅配置####################################
+#环迅配置
+HX.url=http://180.168.26.114:20010/p2p-deposit/gateway.htm				
+HX.loginUrl=http://180.168.26.114:20010/p2p-deposit/login.html
+#HX.url=https://UFunds.ips.com.cn/p2p-deposit/gateway.htm
+#HX.loginUrl=https://UFunds.ips.com.cn/p2p-deposit/login.html
+#用户账户
+#HX.merchantID=1811860012
+HX.merchantID=1184980025
+#用户密码
+#HX.pwd=Lzq112105
+#环讯Host配置
+#host：180.168.26.114 channel.web.ips.local
+#回调地址
+IPS.HX.BgRetUrl.Common = /Ips/huifu/bgReturn.do
+IPS.HX.frontRetUrl.Common = /Ips/huifu/frontReturn.do
+#DES加密key
+HuanXun.Pub.Key=r0uScmDuH5FLO37AJV2FN72J
+#HuanXun.Pub.Key=1dcrm4goSY8KODsgU1PPuHLB
+#MD5加密key
+#HuanXun.Pub.MD5Key=RCFW0OrYbBYVyBWyRZq3svbcDWAvFVL2pNCCExUM9WHqzrSfQq4HQNbJkZ6kyjxDch1POl5c8URqlyqNo6fzLoUgXCDSf53J77gyMKL3qlXlf0on6m6ytmjCf7y4XzAE
+HuanXun.Pub.MD5Key=Ys6z7H93z9h3kQll7tv02SUsjWDcVsatanaPuE4NMbfGLLDOoaAhN7hN9eUxzx45wGT3Ch8De1XwPvRNF0n7GqrnbWRmnlVbxZEs7n6og5229XUveYq9sENyEP5CEsLr
+#向量
+HX.IV=1eX24DCe
+#HX.IV=QCsG2STR
+
+
+
+########################平台手续费#######################################
+#平台手续费
+PayFee=0.00
+#Ips手续费
+IPSPayFee=0.00
+ipsFreeType=1
+#平台手续费类型
+merFeeType=1
+#发起方
+taker=2
+#企业法人的身份证号码
+finaCertNo=412727199202263528
+#融资方姓名
+finaName=兰俊俊
+#adminPhone
+adminPhone=18538587512
+#违约比例
+WYPer=0.02
+
+
+
+########################PC富友#######################################
+#商户号
+#Fy.mchnt_cd=0002900F0280107
+#Fy.mchnt_key=05d1eecA7c6e3444d5abec0EA7b68Ffe
+#地址
+#Fy.URL=https://pay.fuiou.com/
+
+#测试商户号
+Fy.mchnt_cd=0001000F0040992
+Fy.mchnt_key=vau6p7ldawpezyaugc0kopdrrwm4gkpu
+#测试地址
+Fy.URL=http://www-1.fuiou.com:8888/wg1_run/
+#路径
+FY.ZF.BgRetUrl.Common=/Fy/fuyou/bgReturn
+FY.ZF.BgRetUrl.Commonc=/Fy/fuyou/bgReturn1
+FY.ZF.BgRetUrl.Commond=/Fy/fuyou/bgReturn2
+FY.ZF.frontRetUrl.Common=/Fy/fuyou/frontReturn
+
+########################APP富友#######################################
+#商户号
+#Fy.APP.mchnt_cd=0002900F0096235
+#Fy.APP.mchnt_key=5old71wihg2tqjug9kkpxnhx9hiujoqj
+Fy.APP.mchnt_cd=0002900F0280107
+Fy.APP.mchnt_key=egwipfpg6hz6xmq23ivl7laoc1vl0rek
+#地址
+Fy.APP.URL=http://www-1.fuiou.com:18670/mobile_pay/findPay
+#api支付下单接口地址
+Fy.api.order_url=http://www-1.fuiou.com:18670/mobile_pay/apipay/orderAction.pay
+#api支付接口地址
+Fy.api.pay_url=http://www-1.fuiou.com:18670/mobile_pay/apipay/payAction.pay
+#api支付下单回调地址
+Fy.api.order_back_url=http://139.196.104.97/app/fy/orderBack.do
+#充值
+Fy.APP.PAY.URL=http://www-1.fuiou.com:18670/mobile_pay/h5pay
+#限额查询接口测试地址
+Fy.APP.AmtLimit.URL=http://www-1.fuiou.com:18670/mobile_pay/amtlimit/lmtQueryAction.pay
+#商户订单结果查询接口测试地址
+Fy.APP.QueryOrder.URL=http://www-1.fuiou.com:18670/mobile_pay/findPay/queryOrderId.pay
+
+
+########################推送消息#######################################
+PUSHappkeyAndroid=589be2ec07fe655ceb0003cd
+PUSHappkeyMasterSecretAndroid= pbaba8jutphd66utudrpi6pnrszfiskn
+PUSHappkeyIOS=58771aa4aed1797a85000b7d
+PUSHappMasterSecretIOS=qbdwrlekbqt2kd1t3jxfbxrt2hp1fw3c
+AndroidDeviceTokenlength=44
+IOSDeviceTokenlength=64
+
+
+
+#########################代理商################################
+DefaultStartTime=2010-01-01
+DefaultHeadImg=/static_img/headImg/default.png
+
+
+
+#######################IP地址查询#####################################
+ip.token=47fc154e1e1fb3e8ee0f9f673e282853
+ip.url=https://api.ip138.com/query/
+#可选jsonp/xml/txt
+ip.datatype =jsonp        
+
+
+
+#######################环境地址配置#####################################
+contractDemoPDF=D:/tool/files/contract/contractDemo.pdf
+contractTargetPDF=D:/tool/files/contract/
+policyDemoPDF=D:/tool/files/policy/policyDemo.pdf
+policyTargetPDF=D:/tool/files/policy/
+guaranteeUnit=中国平安保险
+guaranteeNum=4008219026
+#contractTargetPDF=
+#contractDemoPDF=
+ImgPath=192.168.1.200:8091
+#ImgPath=www.yhb118.com
+
+
+
+#######################极光推送参数设置#####################################
+JPUSH_APP_KEY=097c8418c4579dd080a207df
+JPUSH_MASTER_SECRET=443222262eea456942e5a148
+JPUSH_PUSH_API_URL=https://api.jpush.cn
+JPUSH_DEVICE_API_URL=https://device.jpush.cn
+
+

@@ -1,0 +1,75 @@
+package com.yhb.controller;
+
+import com.yhb.base.BaseController;
+import com.yhb.service.activity.CommonActivityService;
+import com.yhb.service.activity.ExperienceSendService;
+import com.yhb.util.cache.RedisCache;
+import com.yhb.util.json.SpringUtils;
+import com.yhb.validate.ParamCheckValidate;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ *
+ * @ClassName: Ima9geFormController.java
+ * @Description: 活动礼券
+ * @author:Krx
+ * @date: 2017年5月8日 下午5:12:43
+ */
+@Controller
+@RequestMapping("act/")
+public class ActivityController extends BaseController {
+
+    @Autowired
+    CommonActivityService commonActivityService;
+    @Autowired
+    RedisCache cache;
+
+
+
+    /**
+     *
+     * @Description: 根据UserId,id获取用户活动礼券
+     *
+     * @param: userId
+     * @return：List
+     * @author: Krx
+     * @date: 2017年5月8日 下午3:47:16
+     */
+    @RequestMapping("useract")
+    public void getUserAct(HttpServletResponse response, @RequestBody Map<String,String> param){
+        // 验证参数工具类，当该map有值时说明验证失败
+        Map<String, String> retMap = ParamCheckValidate.getValidateInfo(param);
+        if (retMap.size() > 0) {
+            for (String keyName : retMap.keySet()) {
+                String value = retMap.get(keyName);
+                SpringUtils.renderJsonResult(response, Integer.parseInt(keyName), value);
+                return;
+            }
+        }
+
+        //验证token是否存在
+        if (cache.tokenExit(param.get("token"))) {
+            JSONObject object = JSONObject.fromObject(param.get("datas"));
+            JSONArray jsonArray = JSONArray.fromObject(object);
+            System.out.println(jsonArray);
+
+        }
+
+        SpringUtils.renderJson(response, returnVo);
+
+    }
+
+
+
+
+
+}

@@ -1,0 +1,53 @@
+/**
+ * 
+ */
+package com.yhb.service.bank;
+
+import java.util.Map;
+
+import com.yhb.bean.entity.BaseBankcard;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ * 
+ * @ClassName: BaseBankcardService.java
+ * @Description: 用户银行卡
+ * @author:Krx
+ * @date: 2017年5月12日 下午1:27:44
+ */
+public interface BaseBankcardService {
+
+	/**
+	 * 
+	 * @Description:根据param查询银行卡信息
+	 *
+	 * @param:userId
+	 * @return：实体类
+	 * @author: Krx
+	 * @date: 2017年5月12日 下午1:28:12
+	 */
+	BaseBankcard selectUserBankInfoByUserId(String param);
+
+	/**
+	 * 
+	 * @Description:根据实体类更新用户银行卡信息
+	 *
+	 * @param:baseBankCard
+	 * @return：boolean
+	 * @author: Krx
+	 * @date: 2017年5月12日 下午1:28:12
+	 */
+	boolean updateBankInfo(BaseBankcard baseBankCard);
+
+	/**
+	 * 
+	 * @Description:根据Map添加用户银行卡信息
+	 *
+	 * @param:baseBankCard
+	 * @return：boolean
+	 * @author: Krx
+	 * @date: 2017年5月12日 下午1:28:12
+	 */
+	boolean insertBankInfo(Map<String,String> param);
+
+}

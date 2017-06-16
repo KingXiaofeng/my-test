@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yhb.dao.RedBuyProDao" >
+  <resultMap id="BaseResultMap" type="com.yhb.bean.entity.RedBuyPro" >
+    <id column="redBuyId" property="redbuyid" jdbcType="INTEGER" />
+    <result column="redName" property="redname" jdbcType="VARCHAR" />
+    <result column="proFpuid" property="profpuid" jdbcType="INTEGER" />
+    <result column="redUseTime" property="redusetime" jdbcType="TIMESTAMP" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+    <result column="redSendId" property="redsendid" jdbcType="INTEGER" />
+    <result column="redMoney" property="redmoney" jdbcType="DECIMAL" />
+    <result column="Res1" property="res1" jdbcType="VARCHAR" />
+    <result column="Res2" property="res2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    redBuyId, redName, proFpuid, redUseTime, userId, redSendId, redMoney, Res1, Res2
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yhb.bean.entity.RedBuyProExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from redbuypro
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from redbuypro
+    where redBuyId = #{redbuyid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from redbuypro
+    where redBuyId = #{redbuyid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yhb.bean.entity.RedBuyProExample" >
+    delete from redbuypro
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yhb.bean.entity.RedBuyPro" >
+    insert into redbuypro (redBuyId, redName, proFpuid, 
+      redUseTime, userId, redSendId, 
+      redMoney, Res1, Res2
+      )
+    values (#{redbuyid,jdbcType=INTEGER}, #{redname,jdbcType=VARCHAR}, #{profpuid,jdbcType=INTEGER}, 
+      #{redusetime,jdbcType=TIMESTAMP}, #{userid,jdbcType=VARCHAR}, #{redsendid,jdbcType=INTEGER}, 
+      #{redmoney,jdbcType=DECIMAL}, #{res1,jdbcType=VARCHAR}, #{res2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yhb.bean.entity.RedBuyPro" >
+    insert into redbuypro
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="redbuyid != null" >
+        redBuyId,
+      </if>
+      <if test="redname != null" >
+        redName,
+      </if>
+      <if test="profpuid != null" >
+        proFpuid,
+      </if>
+      <if test="redusetime != null" >
+        redUseTime,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="redsendid != null" >
+        redSendId,
+      </if>
+      <if test="redmoney != null" >
+        redMoney,
+      </if>
+      <if test="res1 != null" >
+        Res1,
+      </if>
+      <if test="res2 != null" >
+        Res2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="redbuyid != null" >
+        #{redbuyid,jdbcType=INTEGER},
+      </if>
+      <if test="redname != null" >
+        #{redname,jdbcType=VARCHAR},
+      </if>
+      <if test="profpuid != null" >
+        #{profpuid,jdbcType=INTEGER},
+      </if>
+      <if test="redusetime != null" >
+        #{redusetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="redsendid != null" >
+        #{redsendid,jdbcType=INTEGER},
+      </if>
+      <if test="redmoney != null" >
+        #{redmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="res1 != null" >
+        #{res1,jdbcType=VARCHAR},
+      </if>
+      <if test="res2 != null" >
+        #{res2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yhb.bean.entity.RedBuyProExample" resultType="java.lang.Integer" >
+    select count(*) from redbuypro
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update redbuypro
+    <set >
+      <if test="record.redbuyid != null" >
+        redBuyId = #{record.redbuyid,jdbcType=INTEGER},
+      </if>
+      <if test="record.redname != null" >
+        redName = #{record.redname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.profpuid != null" >
+        proFpuid = #{record.profpuid,jdbcType=INTEGER},
+      </if>
+      <if test="record.redusetime != null" >
+        redUseTime = #{record.redusetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userid != null" >
+        userId = #{record.userid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.redsendid != null" >
+        redSendId = #{record.redsendid,jdbcType=INTEGER},
+      </if>
+      <if test="record.redmoney != null" >
+        redMoney = #{record.redmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.res1 != null" >
+        Res1 = #{record.res1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.res2 != null" >
+        Res2 = #{record.res2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update redbuypro
+    set redBuyId = #{record.redbuyid,jdbcType=INTEGER},
+      redName = #{record.redname,jdbcType=VARCHAR},
+      proFpuid = #{record.profpuid,jdbcType=INTEGER},
+      redUseTime = #{record.redusetime,jdbcType=TIMESTAMP},
+      userId = #{record.userid,jdbcType=VARCHAR},
+      redSendId = #{record.redsendid,jdbcType=INTEGER},
+      redMoney = #{record.redmoney,jdbcType=DECIMAL},
+      Res1 = #{record.res1,jdbcType=VARCHAR},
+      Res2 = #{record.res2,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yhb.bean.entity.RedBuyPro" >
+    update redbuypro
+    <set >
+      <if test="redname != null" >
+        redName = #{redname,jdbcType=VARCHAR},
+      </if>
+      <if test="profpuid != null" >
+        proFpuid = #{profpuid,jdbcType=INTEGER},
+      </if>
+      <if test="redusetime != null" >
+        redUseTime = #{redusetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="redsendid != null" >
+        redSendId = #{redsendid,jdbcType=INTEGER},
+      </if>
+      <if test="redmoney != null" >
+        redMoney = #{redmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="res1 != null" >
+        Res1 = #{res1,jdbcType=VARCHAR},
+      </if>
+      <if test="res2 != null" >
+        Res2 = #{res2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where redBuyId = #{redbuyid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yhb.bean.entity.RedBuyPro" >
+    update redbuypro
+    set redName = #{redname,jdbcType=VARCHAR},
+      proFpuid = #{profpuid,jdbcType=INTEGER},
+      redUseTime = #{redusetime,jdbcType=TIMESTAMP},
+      userId = #{userid,jdbcType=VARCHAR},
+      redSendId = #{redsendid,jdbcType=INTEGER},
+      redMoney = #{redmoney,jdbcType=DECIMAL},
+      Res1 = #{res1,jdbcType=VARCHAR},
+      Res2 = #{res2,jdbcType=VARCHAR}
+    where redBuyId = #{redbuyid,jdbcType=INTEGER}
+  </update>
+</mapper>

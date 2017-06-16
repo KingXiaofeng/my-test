@@ -1,0 +1,29 @@
+/**
+ * 
+ */
+package com.yhb.service.common;
+
+import com.yhb.bean.entity.BaseConfig;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ * 
+ * @ClassName: BaseConfigService.java
+ * @Description: 系统配置
+ * @author:Krx
+ * @date: 2017年5月8日 下午3:46:55
+ */
+public interface BaseConfigService {
+
+	/**
+	 * 
+	 * @Description: 根据配置名称查询配置
+	 *
+	 * @param:param
+	 * @return：BaseConfig
+	 * @author: Krx
+	 * @date: 2017年5月8日 下午3:47:16
+	 */
+	BaseConfig selectByParam(String param);
+
+}

@@ -1,0 +1,528 @@
+package com.yhb.util.json;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+/**
+ * 
+* @ClassName: JSONUtil.java
+* @Description: JSON工具类
+*
+* @version: v1.0.0
+* @author: wangxf
+* @date: 2017年5月3日 上午11:55:27 
+*
+* Modification History:
+* Date         Author          Version            Description
+*---------------------------------------------------------*
+* 2017年5月3日     wangxf           v1.0.0               修改原因
+ */
+public class JSONUtil {
+
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: list转化为json
+	*
+	* @param: List<T> list
+	* @return： <T> String
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 上午11:55:51 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	public static <T> String toJSONString(List<T> list){
+		JSONArray jsonArray = JSONArray.fromObject(list);
+		return jsonArray.toString();
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将对象序列化为JSON文本
+	*
+	* @param: Object
+	* @return： String
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 上午11:58:27 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	public static String toJSONString(Object object){
+		JSONArray jsonArray = JSONArray.fromObject(object);
+		return jsonArray.toString();
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将JSON对象数组序列化为JSON文本
+	*
+	* @param: JSONArray
+	* @return： String
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午12:01:01 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	public static String toJSONString(JSONArray jsonArray){
+		return jsonArray.toString();
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将JSON对象数组序列化为JSON文本
+	*
+	* @param: JSONObject
+	* @return： String
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午12:01:01 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	public static String toJSONString(JSONObject jsonObject){
+		return jsonObject.toString();
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将对象转化为List
+	*
+	* @param: Object
+	* @return：  List
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午12:04:46 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	@SuppressWarnings("rawtypes")
+	public static List<Object> toArrayList(Object object){
+		
+		List<Object> arrayList = new ArrayList<Object>();
+		
+		JSONArray jsonArray = JSONArray.fromObject(object);
+		
+		
+		Iterator iterator = jsonArray.iterator();
+		
+		while( iterator.hasNext() ){
+			
+			JSONObject jsonObject = (JSONObject) iterator.next();
+			Iterator keys = jsonObject.keys();
+			
+			while( keys.hasNext() ){
+				Object key = keys.next();
+				Object value = jsonObject.get(key);
+				arrayList.add(value);
+			}
+		}
+		return arrayList;
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description:将对象转换成 List<Map<String, Object>> 集合
+	*
+	* @param: Object
+	* @return： List<Map<String, Object>>
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午1:53:35 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	@SuppressWarnings("rawtypes")
+	public static List<Map<String, Object>> toList(Object object){
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		JSONArray jsonArray = JSONUtil.toJsonArray(object);
+		
+		for( Object obj : jsonArray ){
+			JSONObject jsonObject = (JSONObject) obj;
+			Map<String, Object> map = new HashMap<String,Object>();
+			
+			Iterator iterator = jsonObject.keys();
+			
+			while( iterator.hasNext() ){
+				String key = (String) iterator.next();
+				Object value = jsonObject.get(key);
+				map.put(key, value);
+			}
+			list.add(map);
+		}
+		return list;
+	}
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将对象转换为Collection对象
+	*
+	* @param: Object
+	* @return：Collection
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午1:32:15 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	@SuppressWarnings("unchecked")
+	public static Collection<Object> toCollection(Object object){
+		JSONArray jsonArray = JSONArray.fromObject(object);
+		return JSONArray.toCollection(jsonArray);
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description:将对象转换为JSON对象数组
+	*
+	* @param: Object
+	* @return： JSONArray
+	* @throws： 
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午1:35:35 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	public static JSONArray toJsonArray(Object object){
+		return JSONArray.fromObject(object);
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将对象转换为JSON对象
+	*
+	* @param: Object
+	* @return： JSONArray
+	* @throws： 
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午1:35:35 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	public static JSONObject toJsonObject(Object object){
+		return JSONObject.fromObject(object);
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将对象转换为Map
+	*
+	* @param: Object
+	* @return： Map
+	* @throws： 
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午1:35:35 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	@SuppressWarnings("rawtypes")
+	public static Map<String,Object> toMap(Object object){
+		Map<String, Object> data = new HashMap<String,Object>();
+		JSONObject jsonObject = JSONUtil.toJsonObject(object);
+		
+		Iterator iterator = jsonObject.keys();
+		while( iterator.hasNext() ){
+			String key = String.valueOf(iterator.next());
+			Object value = jsonObject.get(key);
+			data.put(key, value);
+		}
+		return data;
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将JSON对象数组转换为传入类型的List
+	*
+	* @param: JSONArray
+	* @param: Class<T>
+	* @return： List<T>
+	* 
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午2:04:11 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked", "static-access" })
+	public static <T> List<T> toList(JSONArray jsonArray,Class<T> objectClazz){
+		return jsonArray.toList(jsonArray,objectClazz);
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将对象转换为传入类型的List
+	*
+	* @param: Object
+	* @param: Class<T>
+	* @return： List<T>
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午2:08:04 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	public static <T> List<T> toList(Object object,Class<T> objectClazz){
+		JSONArray jsonArray = JSONArray.fromObject(object);
+		return JSONUtil.toList(jsonArray, objectClazz);
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将JSON对象转换为传入类型的对象
+	*
+	* @param: JSONObject
+	* @param: Class<T>
+	* @return： T
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午2:14:43 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T toObject(JSONObject jsonObject,Class<T> clazz){
+		return (T) JSONObject.toBean(jsonObject,clazz);
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将将对象转换为传入类型的对象
+	*
+	* @param: Object
+	* @param: Class<T>
+	* @return： T
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午2:14:43 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	public static <T> T toObject(Object object,Class<T> clazz){
+		JSONObject jsonObject = JSONObject.fromObject(object);
+		return JSONUtil.toObject(jsonObject, clazz);
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将JSON文本反序列化为主从关系的实体
+	*
+	* @param: 泛型T 代表主实体类型
+    * @param: 泛型D 代表从实体类型
+    * @param: String jsonString JSON文本
+    * @param: Class<T> mainClazz 主实体类型
+    * @param: String detailName 从实体类在主实体类中的属性名称
+    * @param: Class<T> detailClazz 从实体类型
+	* @return： <T,D> T
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午2:28:15 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	public static <T,D> T toObject( String jsonString, Class<T> mainClazz,
+									String detailName, Class<D> detailClazz ){
+		JSONObject jsonObject = JSONObject.fromObject(jsonString);
+		JSONArray jsonArray = (JSONArray) jsonObject.get(detailName);
+		
+		T mainObject = JSONUtil.toObject(jsonObject, mainClazz);
+		
+		List<D> detailList = JSONUtil.toList(jsonArray, detailClazz);
+		
+		try {
+			BeanUtils.setProperty(mainObject, detailName, detailList);
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			throw new RuntimeException("主从关系JSON反序列化实体失败！");
+		}
+		return mainObject;
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将JSON文本反序列化为主从关系的实体
+	*
+	* @param：泛型T 代表主实体类型
+    * @param：泛型D1 代表从实体类型
+    * @param：泛型D2 代表从实体类型
+    * @param：String jsonString JSON文本
+    * @param：Class<T> mainClass 主实体类型
+    * @param：String detailName1 从实体类在主实体类中的属性
+    * @param：Class<D1> detailClass1 从实体类型
+    * @param：String detailName2 从实体类在主实体类中的属性
+    * @param： Class<D2> detailClass2 从实体类型
+	* @return：T
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午2:51:33 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	public static <T,D1,D2> T toObject( String jsonString, Class<T> mainClazz,
+										String detailName1, Class<D1> detailClazz1,
+										String detailName2, Class<D2> detailClazz2 ){
+		JSONObject jsonObject = JSONObject.fromObject(jsonString);
+		JSONArray jsonArray1 = (JSONArray) jsonObject.get(detailName1);
+		JSONArray jsonArray2 = (JSONArray) jsonObject.get(detailName2);
+		
+		T mainObject = JSONUtil.toObject(jsonObject, mainClazz);
+		List<D1> detailList1 = JSONUtil.toList(jsonArray1, detailClazz1);
+		List<D2> detailList2 = JSONUtil.toList(jsonArray2, detailClazz2);
+		
+		try {
+			BeanUtils.setProperty(mainObject, detailName1, detailList1);
+			BeanUtils.setProperty(mainObject, detailName2, detailList2);
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			throw new RuntimeException("主从关系JSON反序列化实体失败！");
+		}
+		
+		return mainObject;
+	}
+	
+	/**
+	 * 
+	* @Function: JSONUtil.java
+	* @Description: 将JSON文本反序列化为主从关系的实体
+	*
+	* @param： T 主实体类型
+    * @param： String jsonString JSON文本
+    * @param： Class<T> mainClass 主实体类型
+    * @param：  Map<String,Class<T>> detailClass 存放了多个从实体在主实体中属性名称和类型
+	* @return： T 
+	* @throws：
+	*
+	* @version: v1.0.0
+	* @author: wangxf
+	* @date: 2017年5月3日 下午3:03:44 
+	*
+	* Modification History:
+	* Date         Author          Version            Description
+	*---------------------------------------------------------*
+	* 2017年5月3日     wangxf           v1.0.0               修改原因
+	 */
+	public static <T> T toObject( String jsonString, Class<T> mainClazz,
+								  Map<String,Class<T>> detailClazz ){
+		JSONObject jsonObject = JSONObject.fromObject(jsonString);
+		T mainObject = JSONUtil.toObject(jsonObject, mainClazz);
+		
+		for( Object key : detailClazz.keySet() ){
+			Class<T> value = detailClazz.get(key);
+			try {
+				BeanUtils.setProperty(mainObject, key.toString(), value);
+			} catch (IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException("主从关系JSON反序列化实体失败！");
+			}
+		}
+		return mainObject;
+	}
+	
+	
+	/*
+	public static void main(String[] args) {
+	}
+	*/
+}

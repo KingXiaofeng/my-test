@@ -1,0 +1,29 @@
+/**
+ * 
+ */
+package com.yhb.service.bank;
+
+import com.yhb.bean.entity.BaseInterfaceBank;
+
+/**
+ * Copyright: Copyright (c) 2017 LanRu-Caifu
+ * 
+ * @ClassName: BaseInterfaceBankService.java
+ * @Description: 银行接口
+ * @author:Krx
+ * @date: 2017年5月9日 下午1:43:27
+ */
+public interface BaseInterfaceBankService {
+
+	/**
+	 * 
+	 * @Description:根据银行代码查询银行
+	 *
+	 * @param:String bankcode
+	 * @return：实体类
+	 * @author: Krx
+	 * @date: 2017年5月9日 下午1:44:19
+	 */
+	BaseInterfaceBank selectBankNumByBankCode(String bankCode);
+
+}

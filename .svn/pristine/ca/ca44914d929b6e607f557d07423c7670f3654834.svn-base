@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yhb.dao.BaseInterfaceBankDao">
+	<resultMap id="BaseResultMap" type="com.yhb.bean.entity.BaseInterfaceBank">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="InterfaceID" property="interfaceid" jdbcType="VARCHAR" />
+		<result column="banknum" property="banknum" jdbcType="VARCHAR" />
+		<result column="isopen" property="isopen" jdbcType="BIT" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="ChannelID" property="channelid" jdbcType="INTEGER" />
+		<result column="CardType" property="cardtype" jdbcType="VARCHAR" />
+		<result column="cardBankColorImg" property="cardbankcolorimg"
+			jdbcType="VARCHAR" />
+		<result column="cradBankLogImg" property="cradbanklogimg"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, InterfaceID, banknum, isopen, sort, remark, ChannelID, CardType,
+		cardBankColorImg,
+		cradBankLogImg
+	</sql>
+	
+	<select id="selectBankNumByBankCode" resultMap="BaseResultMap">
+	 select <include refid="Base_Column_List" /> from base_interface_bank where banknum = #{banknum}
+	</select>
+	
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.yhb.bean.entity.BaseInterfaceBankExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from base_interface_bank
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<delete id="deleteByExample" parameterType="com.yhb.bean.entity.BaseInterfaceBankExample">
+		delete from base_interface_bank
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.yhb.bean.entity.BaseInterfaceBank">
+		insert into base_interface_bank (id, InterfaceID, banknum,
+		isopen, sort, remark, ChannelID,
+		CardType, cardBankColorImg, cradBankLogImg
+		)
+		values (#{id,jdbcType=INTEGER}, #{interfaceid,jdbcType=VARCHAR},
+		#{banknum,jdbcType=VARCHAR},
+		#{isopen,jdbcType=BIT}, #{sort,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR},
+		#{channelid,jdbcType=INTEGER},
+		#{cardtype,jdbcType=VARCHAR}, #{cardbankcolorimg,jdbcType=VARCHAR},
+		#{cradbanklogimg,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.yhb.bean.entity.BaseInterfaceBank">
+		insert into base_interface_bank
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="interfaceid != null">
+				InterfaceID,
+			</if>
+			<if test="banknum != null">
+				banknum,
+			</if>
+			<if test="isopen != null">
+				isopen,
+			</if>
+			<if test="sort != null">
+				sort,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="channelid != null">
+				ChannelID,
+			</if>
+			<if test="cardtype != null">
+				CardType,
+			</if>
+			<if test="cardbankcolorimg != null">
+				cardBankColorImg,
+			</if>
+			<if test="cradbanklogimg != null">
+				cradBankLogImg,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="interfaceid != null">
+				#{interfaceid,jdbcType=VARCHAR},
+			</if>
+			<if test="banknum != null">
+				#{banknum,jdbcType=VARCHAR},
+			</if>
+			<if test="isopen != null">
+				#{isopen,jdbcType=BIT},
+			</if>
+			<if test="sort != null">
+				#{sort,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="channelid != null">
+				#{channelid,jdbcType=INTEGER},
+			</if>
+			<if test="cardtype != null">
+				#{cardtype,jdbcType=VARCHAR},
+			</if>
+			<if test="cardbankcolorimg != null">
+				#{cardbankcolorimg,jdbcType=VARCHAR},
+			</if>
+			<if test="cradbanklogimg != null">
+				#{cradbanklogimg,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.yhb.bean.entity.BaseInterfaceBankExample"
+		resultType="java.lang.Integer">
+		select count(*) from base_interface_bank
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update base_interface_bank
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.interfaceid != null">
+				InterfaceID = #{record.interfaceid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.banknum != null">
+				banknum = #{record.banknum,jdbcType=VARCHAR},
+			</if>
+			<if test="record.isopen != null">
+				isopen = #{record.isopen,jdbcType=BIT},
+			</if>
+			<if test="record.sort != null">
+				sort = #{record.sort,jdbcType=INTEGER},
+			</if>
+			<if test="record.remark != null">
+				remark = #{record.remark,jdbcType=VARCHAR},
+			</if>
+			<if test="record.channelid != null">
+				ChannelID = #{record.channelid,jdbcType=INTEGER},
+			</if>
+			<if test="record.cardtype != null">
+				CardType = #{record.cardtype,jdbcType=VARCHAR},
+			</if>
+			<if test="record.cardbankcolorimg != null">
+				cardBankColorImg = #{record.cardbankcolorimg,jdbcType=VARCHAR},
+			</if>
+			<if test="record.cradbanklogimg != null">
+				cradBankLogImg = #{record.cradbanklogimg,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update base_interface_bank
+		set id = #{record.id,jdbcType=INTEGER},
+		InterfaceID = #{record.interfaceid,jdbcType=VARCHAR},
+		banknum = #{record.banknum,jdbcType=VARCHAR},
+		isopen = #{record.isopen,jdbcType=BIT},
+		sort = #{record.sort,jdbcType=INTEGER},
+		remark = #{record.remark,jdbcType=VARCHAR},
+		ChannelID = #{record.channelid,jdbcType=INTEGER},
+		CardType = #{record.cardtype,jdbcType=VARCHAR},
+		cardBankColorImg = #{record.cardbankcolorimg,jdbcType=VARCHAR},
+		cradBankLogImg = #{record.cradbanklogimg,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+</mapper>

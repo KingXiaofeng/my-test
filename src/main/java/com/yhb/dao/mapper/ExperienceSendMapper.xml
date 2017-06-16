@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yhb.dao.ExperienceSendDao" >
+  <resultMap id="BaseResultMap" type="com.yhb.bean.entity.ExperienceSend" >
+    <id column="ExperienceSendId" property="experiencesendid" jdbcType="INTEGER" />
+    <result column="fPid" property="fpid" jdbcType="VARCHAR" />
+    <result column="UserId" property="userid" jdbcType="CHAR" />
+    <result column="ExperienceId" property="experienceid" jdbcType="INTEGER" />
+    <result column="ExperienceSendTime" property="experiencesendtime" jdbcType="TIMESTAMP" />
+    <result column="ExperienceSendIsUse" property="experiencesendisuse" jdbcType="INTEGER" />
+    <result column="ExperienceSendUseTime" property="experiencesendusetime" jdbcType="TIMESTAMP" />
+    <result column="ExperienceRate" property="experiencerate" jdbcType="DECIMAL" />
+    <result column="ExperienceSendMoney" property="experiencesendmoney" jdbcType="DECIMAL" />
+    <result column="changeCode" property="changecode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yhb.bean.entity.ExperienceSend" extends="BaseResultMap" >
+    <result column="ExperienceSendEm_k1" property="experiencesendemK1" jdbcType="LONGVARCHAR" />
+    <result column="ExperienceSendEm_k2" property="experiencesendemK2" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ExperienceSendId, fPid, UserId, ExperienceId, ExperienceSendTime, ExperienceSendIsUse, 
+    ExperienceSendUseTime, ExperienceRate, ExperienceSendMoney, changeCode
+  </sql>
+  <sql id="Blob_Column_List" >
+    ExperienceSendEm_k1, ExperienceSendEm_k2
+  </sql>
+
+  <select id="selectExperienceSendList" resultMap="BaseResultMap" parameterType="Map" >
+    SELECT
+      ExperienceSendMoney,
+      ExperienceSendIsUse,
+      ExperienceSendTime,
+      ExperienceSendEm_k2,
+      ExperienceSendEm_k1
+    FROM
+      experiencesend
+    WHERE
+      userId = #{userId}
+    AND ExperienceSendIsUse = #{state}
+    ORDER BY
+      ${rank} DESC
+      LIMIT ${current },${size}
+  </select>
+
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.yhb.bean.entity.ExperienceSendExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from experiencesend
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yhb.bean.entity.ExperienceSendExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from experiencesend
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from experiencesend
+    where ExperienceSendId = #{experiencesendid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from experiencesend
+    where ExperienceSendId = #{experiencesendid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yhb.bean.entity.ExperienceSendExample" >
+    delete from experiencesend
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yhb.bean.entity.ExperienceSend" >
+    insert into experiencesend (ExperienceSendId, fPid, UserId, 
+      ExperienceId, ExperienceSendTime, ExperienceSendIsUse, 
+      ExperienceSendUseTime, ExperienceRate, 
+      ExperienceSendMoney, changeCode, ExperienceSendEm_k1, 
+      ExperienceSendEm_k2)
+    values (#{experiencesendid,jdbcType=INTEGER}, #{fpid,jdbcType=VARCHAR}, #{userid,jdbcType=CHAR}, 
+      #{experienceid,jdbcType=INTEGER}, #{experiencesendtime,jdbcType=TIMESTAMP}, #{experiencesendisuse,jdbcType=INTEGER}, 
+      #{experiencesendusetime,jdbcType=TIMESTAMP}, #{experiencerate,jdbcType=DECIMAL}, 
+      #{experiencesendmoney,jdbcType=DECIMAL}, #{changecode,jdbcType=VARCHAR}, #{experiencesendemK1,jdbcType=LONGVARCHAR}, 
+      #{experiencesendemK2,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yhb.bean.entity.ExperienceSend" >
+    insert into experiencesend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="experiencesendid != null" >
+        ExperienceSendId,
+      </if>
+      <if test="fpid != null" >
+        fPid,
+      </if>
+      <if test="userid != null" >
+        UserId,
+      </if>
+      <if test="experienceid != null" >
+        ExperienceId,
+      </if>
+      <if test="experiencesendtime != null" >
+        ExperienceSendTime,
+      </if>
+      <if test="experiencesendisuse != null" >
+        ExperienceSendIsUse,
+      </if>
+      <if test="experiencesendusetime != null" >
+        ExperienceSendUseTime,
+      </if>
+      <if test="experiencerate != null" >
+        ExperienceRate,
+      </if>
+      <if test="experiencesendmoney != null" >
+        ExperienceSendMoney,
+      </if>
+      <if test="changecode != null" >
+        changeCode,
+      </if>
+      <if test="experiencesendemK1 != null" >
+        ExperienceSendEm_k1,
+      </if>
+      <if test="experiencesendemK2 != null" >
+        ExperienceSendEm_k2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="experiencesendid != null" >
+        #{experiencesendid,jdbcType=INTEGER},
+      </if>
+      <if test="fpid != null" >
+        #{fpid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=CHAR},
+      </if>
+      <if test="experienceid != null" >
+        #{experienceid,jdbcType=INTEGER},
+      </if>
+      <if test="experiencesendtime != null" >
+        #{experiencesendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="experiencesendisuse != null" >
+        #{experiencesendisuse,jdbcType=INTEGER},
+      </if>
+      <if test="experiencesendusetime != null" >
+        #{experiencesendusetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="experiencerate != null" >
+        #{experiencerate,jdbcType=DECIMAL},
+      </if>
+      <if test="experiencesendmoney != null" >
+        #{experiencesendmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="changecode != null" >
+        #{changecode,jdbcType=VARCHAR},
+      </if>
+      <if test="experiencesendemK1 != null" >
+        #{experiencesendemK1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencesendemK2 != null" >
+        #{experiencesendemK2,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yhb.bean.entity.ExperienceSendExample" resultType="java.lang.Integer" >
+    select count(*) from experiencesend
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update experiencesend
+    <set >
+      <if test="record.experiencesendid != null" >
+        ExperienceSendId = #{record.experiencesendid,jdbcType=INTEGER},
+      </if>
+      <if test="record.fpid != null" >
+        fPid = #{record.fpid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null" >
+        UserId = #{record.userid,jdbcType=CHAR},
+      </if>
+      <if test="record.experienceid != null" >
+        ExperienceId = #{record.experienceid,jdbcType=INTEGER},
+      </if>
+      <if test="record.experiencesendtime != null" >
+        ExperienceSendTime = #{record.experiencesendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.experiencesendisuse != null" >
+        ExperienceSendIsUse = #{record.experiencesendisuse,jdbcType=INTEGER},
+      </if>
+      <if test="record.experiencesendusetime != null" >
+        ExperienceSendUseTime = #{record.experiencesendusetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.experiencerate != null" >
+        ExperienceRate = #{record.experiencerate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.experiencesendmoney != null" >
+        ExperienceSendMoney = #{record.experiencesendmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.changecode != null" >
+        changeCode = #{record.changecode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.experiencesendemK1 != null" >
+        ExperienceSendEm_k1 = #{record.experiencesendemK1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.experiencesendemK2 != null" >
+        ExperienceSendEm_k2 = #{record.experiencesendemK2,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update experiencesend
+    set ExperienceSendId = #{record.experiencesendid,jdbcType=INTEGER},
+      fPid = #{record.fpid,jdbcType=VARCHAR},
+      UserId = #{record.userid,jdbcType=CHAR},
+      ExperienceId = #{record.experienceid,jdbcType=INTEGER},
+      ExperienceSendTime = #{record.experiencesendtime,jdbcType=TIMESTAMP},
+      ExperienceSendIsUse = #{record.experiencesendisuse,jdbcType=INTEGER},
+      ExperienceSendUseTime = #{record.experiencesendusetime,jdbcType=TIMESTAMP},
+      ExperienceRate = #{record.experiencerate,jdbcType=DECIMAL},
+      ExperienceSendMoney = #{record.experiencesendmoney,jdbcType=DECIMAL},
+      changeCode = #{record.changecode,jdbcType=VARCHAR},
+      ExperienceSendEm_k1 = #{record.experiencesendemK1,jdbcType=LONGVARCHAR},
+      ExperienceSendEm_k2 = #{record.experiencesendemK2,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update experiencesend
+    set ExperienceSendId = #{record.experiencesendid,jdbcType=INTEGER},
+      fPid = #{record.fpid,jdbcType=VARCHAR},
+      UserId = #{record.userid,jdbcType=CHAR},
+      ExperienceId = #{record.experienceid,jdbcType=INTEGER},
+      ExperienceSendTime = #{record.experiencesendtime,jdbcType=TIMESTAMP},
+      ExperienceSendIsUse = #{record.experiencesendisuse,jdbcType=INTEGER},
+      ExperienceSendUseTime = #{record.experiencesendusetime,jdbcType=TIMESTAMP},
+      ExperienceRate = #{record.experiencerate,jdbcType=DECIMAL},
+      ExperienceSendMoney = #{record.experiencesendmoney,jdbcType=DECIMAL},
+      changeCode = #{record.changecode,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yhb.bean.entity.ExperienceSend" >
+    update experiencesend
+    <set >
+      <if test="fpid != null" >
+        fPid = #{fpid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        UserId = #{userid,jdbcType=CHAR},
+      </if>
+      <if test="experienceid != null" >
+        ExperienceId = #{experienceid,jdbcType=INTEGER},
+      </if>
+      <if test="experiencesendtime != null" >
+        ExperienceSendTime = #{experiencesendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="experiencesendisuse != null" >
+        ExperienceSendIsUse = #{experiencesendisuse,jdbcType=INTEGER},
+      </if>
+      <if test="experiencesendusetime != null" >
+        ExperienceSendUseTime = #{experiencesendusetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="experiencerate != null" >
+        ExperienceRate = #{experiencerate,jdbcType=DECIMAL},
+      </if>
+      <if test="experiencesendmoney != null" >
+        ExperienceSendMoney = #{experiencesendmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="changecode != null" >
+        changeCode = #{changecode,jdbcType=VARCHAR},
+      </if>
+      <if test="experiencesendemK1 != null" >
+        ExperienceSendEm_k1 = #{experiencesendemK1,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="experiencesendemK2 != null" >
+        ExperienceSendEm_k2 = #{experiencesendemK2,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ExperienceSendId = #{experiencesendid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yhb.bean.entity.ExperienceSend" >
+    update experiencesend
+    set fPid = #{fpid,jdbcType=VARCHAR},
+      UserId = #{userid,jdbcType=CHAR},
+      ExperienceId = #{experienceid,jdbcType=INTEGER},
+      ExperienceSendTime = #{experiencesendtime,jdbcType=TIMESTAMP},
+      ExperienceSendIsUse = #{experiencesendisuse,jdbcType=INTEGER},
+      ExperienceSendUseTime = #{experiencesendusetime,jdbcType=TIMESTAMP},
+      ExperienceRate = #{experiencerate,jdbcType=DECIMAL},
+      ExperienceSendMoney = #{experiencesendmoney,jdbcType=DECIMAL},
+      changeCode = #{changecode,jdbcType=VARCHAR},
+      ExperienceSendEm_k1 = #{experiencesendemK1,jdbcType=LONGVARCHAR},
+      ExperienceSendEm_k2 = #{experiencesendemK2,jdbcType=LONGVARCHAR}
+    where ExperienceSendId = #{experiencesendid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yhb.bean.entity.ExperienceSend" >
+    update experiencesend
+    set fPid = #{fpid,jdbcType=VARCHAR},
+      UserId = #{userid,jdbcType=CHAR},
+      ExperienceId = #{experienceid,jdbcType=INTEGER},
+      ExperienceSendTime = #{experiencesendtime,jdbcType=TIMESTAMP},
+      ExperienceSendIsUse = #{experiencesendisuse,jdbcType=INTEGER},
+      ExperienceSendUseTime = #{experiencesendusetime,jdbcType=TIMESTAMP},
+      ExperienceRate = #{experiencerate,jdbcType=DECIMAL},
+      ExperienceSendMoney = #{experiencesendmoney,jdbcType=DECIMAL},
+      changeCode = #{changecode,jdbcType=VARCHAR}
+    where ExperienceSendId = #{experiencesendid,jdbcType=INTEGER}
+  </update>
+</mapper>
